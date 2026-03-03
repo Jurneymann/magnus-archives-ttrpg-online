@@ -6,6 +6,49 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Version 2.3.0] - 2026-03-04
+
+### ⚙️ Smart View Modes & UI Polish
+
+Intelligent table view switching across the character sheet, plus battle map improvements and a full project audit.
+
+#### New Features
+
+- **Smart Ability View Switching** (Type & Focus tables):
+  - Automatically shows "Show Selected Only" view when character is confirmed and has no new abilities to select
+  - Automatically switches to "Show All Abilities" when new abilities become available (tier-up or focus change)
+  - Manual override: toggling the view explicitly locks it until the next ability-granting event, preventing auto-switches from overriding player preference
+- **Smart Equipment & Weapon View Switching**:
+  - Same automatic view logic applied to the weapons and items tables
+  - "Show All" automatically becomes active when the player adds the first item
+  - "Show Selected" automatically activates once items are present and all are already tracked
+  - "Show All" state now persists correctly through add/remove actions
+- **Battle Map Layer Switching**:
+  - Layer selector UI added to the battle map panel
+  - Combatants can be moved between layers via the token context menu
+  - Layer names displayed on token cards in the combatant list
+
+#### Bug Fixes
+
+- Fixed details containers collapsing when action buttons inside the Use Map panel were clicked (battle map re-render side effect)
+  - Removed unnecessary `renderBattleMapControls()` calls from 12 state-toggle functions
+- Fixed "Show All" equipment view not persisting after adding or removing an item
+- Fixed manual view toggle being overridden by automatic smart-switch logic (added `ManuallySet` flags to abilities, weapons, and items view state)
+
+#### Project Maintenance
+
+- Removed duplicate function definitions found during code audit:
+  - `abilities-management.js`: removed stale single-focus `getAvailableFocusAbilities()` and duplicate `chooseFocusTierAbility()`
+  - `cypher-system.js`: removed stale first `updateEdgeDisplay()` (used old fallback lookup)
+  - `stress+damage.js`: removed first set of `changeDamageState()`, `setDamageState()`, `updateDamageDisplay()` (less complete versions)
+  - `gm-multiplayer.js`: removed stale `sendTestMessage()` (used deprecated `broadcastMessage` API)
+- Synchronised all three copies of character sheet JS files (`public/functions/character-sheet/`, `functions/character-sheet/`, `character-sheet-source/functions/`) — 9 files were out of sync
+- Synchronised top-level `functions/*.js` files against `public/functions/` — 9 files were out of sync
+- Moved all documentation `.md` files into `docs/` subdirectory for organisation
+- Project backed up to private GitHub repository
+
+---
+
 ## [Version 2.2.0] - 2026-02-12
 
 ### 📚 Quick Reference Toolbar - NEW
