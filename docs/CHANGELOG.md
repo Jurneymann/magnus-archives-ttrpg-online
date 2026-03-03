@@ -6,6 +6,88 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Version 2.2.0] - 2026-02-12
+
+### 📚 Quick Reference Toolbar - NEW
+
+Consolidated GM toolbar with improved Quick Reference system for easier access to game rules.
+
+#### New Features
+
+- **Consolidated 4-Button Toolbar**: Streamlined toolbar with Quick Reference, Multiplayer, Chat, and Horror Mode buttons
+- **Tabbed Quick Reference Modal**: Pop-up modal with 4 tabs for quick rules lookup
+  - **Task Difficulty**: Complete difficulty table (0-10) with target numbers, descriptions, and guidance
+  - **Stress System**: Rules for gaining stress, stress levels, and effects
+  - **Special Rolls**: Defense rolls, recovery rolls, and spending XP
+  - **Damage Track**: Full damage track from Hale to Dead with descriptions
+- **Fixed Modal Dimensions**: Modal now has consistent size (900px × 65vh) so tab buttons stay in same position
+- **Centered Chat Panel**: GM chat window now opens centered on screen instead of top-left corner
+
+#### Bug Fixes
+
+- Fixed Quick Reference button not opening modal (added event parameter to function)
+- Fixed Chat button text alignment (restructured with centered wrapper span)
+- Fixed modal visibility issues (removed conflicting inline styles)
+- Fixed Task Difficulty data not loading (corrected variable name from DIFFICULTIES to DIFFICULTY)
+- Fixed data property mismatch (changed targetNumber to target)
+- Fixed chat panel centering across multiple toggle functions (toolbar.js and gm-multiplayer.js)
+- Fixed chat panel close functionality (removed CSS !important flag)
+
+#### UI Improvements
+
+- Chat notification badge now absolutely positioned to preserve text centering
+- Quick Reference modal uses fixed dimensions for consistent tab button positioning
+- Enhanced modal styling with proper z-index layering
+
+---
+
+## [Version 2.1.0] - 2026-02-10
+
+### 💬 Chat System Enhancements - IMPROVED
+
+Major improvements to the multiplayer chat system for better communication between GM and players.
+
+#### New Features
+
+- **GM Notification Badge**: Chat button now displays a red badge (!) when players send messages while chat is closed
+  - Badge pulses with animation to draw attention
+  - Automatically clears when chat panel is opened
+- **Typing Indicators**: See when someone is typing in real-time
+  - GM sees "Player is typing..." or "2 players are typing..."
+  - Players see "GM is typing..."
+  - Animated three-dot indicator for visual feedback
+  - Auto-clears after 3 seconds of inactivity
+- **Read Receipts**: Message delivery status tracking
+  - "✓ Delivered" when message is sent
+  - "✓✓ Read" when recipient has viewed the message (green checkmarks)
+  - Only shown on sent messages
+- **Message History Cleanup**: Automatic database maintenance
+  - Keeps only the last 100 messages
+  - Auto-deletes messages older than 7 days
+  - Prevents Firebase bloat from long campaigns
+- **Improved Message Display**: Better recipient labeling
+  - Shows "to All Players", "to [Player Name]", or "to GM"
+  - Proper `toName` field population for all messages
+  - Enhanced color coding for sent vs received messages
+
+#### Bug Fixes
+
+- Fixed GM message filtering (removed undefined `msg.sent` check)
+- Added missing `toggleChatPanel()` function for GM
+- Added missing `sendTestMessage()` function for GM broadcast testing
+- Fixed player chat badge not clearing when messages are marked as read
+- Fixed `toName` not being set when GM sends to specific players
+- Improved message read status tracking
+
+#### UI Improvements
+
+- Added chat button to GM multiplayer panel
+- Enhanced CSS animations (pulse effect for notifications, typing bounce animation)
+- Better message hover effects for improved readability
+- Read receipt styling with color-coded status indicators
+
+---
+
 ## [Version 2.0.0] - 2026-01-13
 
 ### ⏰ In-Game Time Tracker - NEW FEATURE
@@ -277,20 +359,14 @@ A comprehensive alternative theme system for running horror-focused campaigns.
 ## Future Planned Features
 
 - **Battle Map Enhancements**:
-
   - Weather and environmental effects
   - More terrain types (lava, ice, etc.)
 
 - **Horror Mode Enhancements**:
-
   - Custom horror level effects/descriptions
 
 - **General Features**:
-  - Random NPC generator
-  - Random location generator
   - Printable character sheets
-  - Cloud save support
-  - Multi-user collaboration
 
 ---
 

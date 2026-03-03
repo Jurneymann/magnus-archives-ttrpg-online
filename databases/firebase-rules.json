@@ -1,0 +1,73 @@
+{
+  "rules": {
+    "rooms": {
+      "$roomCode": {
+        ".read": true,
+        ".write": true,
+        ".indexOn": ["code", "status", "createdAt"],
+
+        "players": {
+          "$playerId": {
+            ".validate": "newData.hasChildren(['id', 'name', 'joinedAt', 'connected'])",
+            "character": {
+              ".validate": "newData.hasChildren(['name'])"
+            }
+          }
+        },
+
+        "combat": {
+          ".validate": "newData.hasChildren(['active'])"
+        },
+
+        "sharedData": {
+          "stressAssignments": {
+            "$playerId": {
+              "$assignmentId": {
+                ".validate": "newData.hasChildren(['amount', 'timestamp'])"
+              }
+            }
+          },
+          "damageAssignments": {
+            "$playerId": {
+              "$assignmentId": {
+                ".validate": "newData.hasChildren(['amount', 'type', 'timestamp'])"
+              }
+            }
+          },
+          "xpAssignments": {
+            "$playerId": {
+              "$assignmentId": {
+                ".validate": "newData.hasChildren(['amount', 'timestamp'])"
+              }
+            }
+          },
+          "diceRolls": {
+            "$rollId": {
+              ".validate": "newData.hasChildren(['playerId', 'type', 'roll', 'timestamp'])"
+            }
+          },
+          "chat": {
+            "$messageId": {
+              ".validate": "newData.hasChildren(['from', 'to', 'message', 'timestamp'])"
+            }
+          }
+        },
+
+        "battleMap": {
+          "visible": {
+            ".validate": "newData.isBoolean()"
+          },
+          "config": {
+            ".validate": "newData.hasChildren(['width', 'height'])"
+          }
+        },
+
+        "messages": {
+          "$messageId": {
+            ".validate": "newData.hasChildren(['content', 'timestamp'])"
+          }
+        }
+      }
+    }
+  }
+}

@@ -12,7 +12,9 @@
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  transition: border-color 1.2s ease, background 1.2s ease;
+  transition:
+    border-color 1.2s ease,
+    background 1.2s ease;
 }
 
 .tab-button {
@@ -88,7 +90,9 @@
   height: 3px;
   background: #4caf50;
   box-shadow: 0 0 10px #4caf50;
-  transition: background 1.2s ease, box-shadow 1.2s ease;
+  transition:
+    background 1.2s ease,
+    box-shadow 1.2s ease;
 }
 
 /* Tab Content */
@@ -99,6 +103,23 @@
 
 .tab-content.active {
   display: block;
+}
+
+/* Remove all top spacing from tab content for uniform appearance */
+.tab-content > *:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.tab-content > .section:first-child,
+.tab-content > div > .section:first-child {
+  margin-top: 0 !important;
+}
+
+/* Also target any wrapper divs at the top */
+.tab-content > div:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 @keyframes fadeIn {
@@ -139,7 +160,8 @@
   background: linear-gradient(135deg, #7e3030 0%, #652828 100%);
   color: #fff;
   border-color: #ff4444;
-  box-shadow: 0 0 20px rgba(255, 68, 68, 0.6),
+  box-shadow:
+    0 0 20px rgba(255, 68, 68, 0.6),
     inset 0 0 10px rgba(255, 68, 68, 0.3);
   text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
   animation: avatarPulse 3s ease-in-out infinite;
@@ -147,17 +169,21 @@
 
 .tab-button[data-tab="avatar"].active::after {
   background: #ff4444;
-  box-shadow: 0 0 10px #ff4444, 0 0 20px rgba(255, 68, 68, 0.5);
+  box-shadow:
+    0 0 10px #ff4444,
+    0 0 20px rgba(255, 68, 68, 0.5);
 }
 
 @keyframes avatarPulse {
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(255, 68, 68, 0.6),
+    box-shadow:
+      0 0 20px rgba(255, 68, 68, 0.6),
       inset 0 0 10px rgba(255, 68, 68, 0.3);
   }
   50% {
-    box-shadow: 0 0 30px rgba(255, 68, 68, 0.8),
+    box-shadow:
+      0 0 30px rgba(255, 68, 68, 0.8),
       inset 0 0 15px rgba(255, 68, 68, 0.4);
   }
 }
@@ -221,7 +247,9 @@
 body.horror-mode-active .tab-buttons {
   border-color: #8b0000;
   background: linear-gradient(135deg, #1a1a1a 0%, #1a0000 100%);
-  transition: border-color 1.2s ease, background 1.2s ease;
+  transition:
+    border-color 1.2s ease,
+    background 1.2s ease;
 }
 
 body.horror-mode-active .tab-button::before {
@@ -249,5 +277,13 @@ body.horror-mode-active .tab-button.active {
 body.horror-mode-active .tab-button.active::after {
   background: #ff0000;
   box-shadow: 0 0 10px #ff0000;
-  transition: background 1.2s ease, box-shadow 1.2s ease;
+  transition:
+    background 1.2s ease,
+    box-shadow 1.2s ease;
+}
+
+/* Force all .section elements in tabs to have no top margin or padding */
+.tab-content .section {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }

@@ -1,0 +1,742 @@
+/* Quick Reference Toolbar */
+.quick-ref-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d1a0d 100%);
+  border-top: 2px solid #317e30;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  padding: 0;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transition: border-top-color 1.2s ease;
+}
+
+.toolbar-button {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a2a1a 100%);
+  color: #888;
+  border: none;
+  border-right: 1px solid #444;
+  padding: 14px 10px;
+  cursor: pointer;
+  font-family: "Libre Baskerville", serif;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 1.2s ease;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.toolbar-button:last-child {
+  border-right: none;
+}
+
+.toolbar-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(49, 126, 48, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.toolbar-button:hover::before {
+  left: 100%;
+}
+
+.toolbar-button:hover {
+  color: #4caf50;
+  background: linear-gradient(135deg, #2a3a2a 0%, #1a2a1a 100%);
+  z-index: 1;
+}
+
+.toolbar-button.active {
+  background: linear-gradient(135deg, #317e30 0%, #2a6528 100%);
+  color: #fff;
+  box-shadow: inset 0 0 10px rgba(76, 175, 80, 0.3);
+  z-index: 2;
+}
+
+.toolbar-button.active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 3px;
+  background: #4caf50;
+  box-shadow: 0 0 10px #4caf50;
+  transition:
+    background 1.2s ease,
+    box-shadow 1.2s ease;
+}
+
+/* Horror Mode Active State */
+#horrorModeToggle.active {
+  background: linear-gradient(135deg, #7e3030 0%, #652828 100%);
+  border-color: #f44336;
+  color: #fff;
+}
+
+#horrorModeToggle.active::after {
+  background: #f44336;
+  box-shadow: 0 0 10px #f44336;
+}
+
+/* Reference Panels */
+.ref-panel {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d1a0d 100%);
+  border: 2px solid #4caf50;
+  border-radius: 8px;
+  box-shadow:
+    0 -4px 30px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(76, 175, 80, 0.2);
+  padding: 20px;
+  width: 900px;
+  height: 65vh;
+  transition:
+    border-color 1.2s ease,
+    box-shadow 1.2s ease;
+  overflow-y: auto;
+  z-index: 9998;
+  display: none;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.ref-panel.active {
+  display: block;
+}
+
+.ref-panel h3 {
+  color: #4caf50;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.3em;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.ref-panel-content {
+  color: #e0e0e0;
+}
+
+/* Custom scrollbar for panels */
+.ref-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ref-panel::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.ref-panel::-webkit-scrollbar-thumb {
+  background: rgba(76, 175, 80, 0.5);
+  border-radius: 4px;
+}
+
+.ref-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(76, 175, 80, 0.7);
+}
+
+/* Difficulty Table in Panel */
+.ref-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+}
+
+.ref-panel table th {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  padding: 10px;
+  text-align: left;
+  border-bottom: 2px solid #4caf50;
+  font-weight: bold;
+}
+
+.ref-panel table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.ref-panel table tr:hover {
+  background: rgba(76, 175, 80, 0.1);
+}
+
+/* Stress Info */
+.stress-info-box,
+.damage-info-box,
+.special-roll-box {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.stress-info-box h4,
+.damage-info-box h4,
+.special-roll-box h4 {
+  color: #66bb6a;
+  margin: 0 0 8px 0;
+  font-size: 1.1em;
+}
+
+.stress-info-box p,
+.damage-info-box p,
+.special-roll-box p {
+  margin: 5px 0;
+  line-height: 1.6;
+}
+
+.stress-info-box strong,
+.damage-info-box strong,
+.special-roll-box strong {
+  color: #4caf50;
+}
+
+/* Warning colors */
+.warning-text {
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.danger-text {
+  color: #f44336;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .quick-ref-toolbar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .toolbar-button {
+    padding: 12px 8px;
+    font-size: 0.75em;
+  }
+
+  .toolbar-button:nth-child(2n) {
+    border-right: none;
+  }
+
+  .toolbar-button:nth-child(-n + 2) {
+    border-bottom: 1px solid #444;
+  }
+
+  .ref-panel {
+    bottom: 50px;
+    max-width: 95vw;
+    padding: 15px;
+  }
+
+  .ref-panel h3 {
+    font-size: 1.1em;
+  }
+}
+
+/* ==================== HORROR MODE OVERRIDES ==================== */
+
+body.horror-mode-active .quick-ref-toolbar {
+  border-top-color: #8b0000;
+  background: linear-gradient(135deg, #1a1a1a 0%, #1a0000 100%);
+  transition:
+    border-top-color 1.2s ease,
+    background 1.2s ease;
+}
+
+body.horror-mode-active .toolbar-button::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 0, 0, 0.3),
+    transparent
+  );
+  transition: background 1.2s ease;
+}
+
+body.horror-mode-active .toolbar-button:hover {
+  color: #ff0000;
+  background: linear-gradient(135deg, #3a2a2a 0%, #2a1a1a 100%);
+  transition: all 1.2s ease;
+}
+
+body.horror-mode-active .toolbar-button.active {
+  background: linear-gradient(135deg, #8b0000 0%, #6a0000 100%);
+  box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3);
+  transition: all 1.2s ease;
+}
+
+body.horror-mode-active .toolbar-button.active::after {
+  background: #ff0000;
+  box-shadow: 0 0 10px #ff0000;
+  transition:
+    background 1.2s ease,
+    box-shadow 1.2s ease;
+}
+
+body.horror-mode-active .ref-panel {
+  background: linear-gradient(135deg, #1a1a1a 0%, #1a0000 100%);
+  border-color: #ff0000;
+  box-shadow:
+    0 -4px 30px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(255, 0, 0, 0.2);
+}
+
+body.horror-mode-active .ref-panel h3 {
+  color: #ff0000;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+body.horror-mode-active .ref-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 0, 0, 0.5);
+}
+
+body.horror-mode-active .ref-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 0, 0, 0.7);
+}
+
+body.horror-mode-active .ref-panel table th {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff0000;
+  border-bottom-color: #ff0000;
+}
+
+body.horror-mode-active .ref-panel table td {
+  border-bottom-color: rgba(255, 0, 0, 0.2);
+}
+
+body.horror-mode-active .ref-panel table tr:hover {
+  background: rgba(255, 0, 0, 0.1);
+}
+
+body.horror-mode-active .stress-info-box,
+body.horror-mode-active .special-roll-box,
+body.horror-mode-active .damage-info-box {
+  border-color: rgba(255, 0, 0, 0.3);
+}
+
+body.horror-mode-active .stress-info-box h4,
+body.horror-mode-active .special-roll-box h4,
+body.horror-mode-active .damage-info-box h4 {
+  color: #ff6b6b;
+}
+
+body.horror-mode-active .warning-text {
+  color: #ff9800;
+}
+
+body.horror-mode-active .danger-text {
+  color: #ff0000;
+}
+/* Player Toolbar */
+.player-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d1a0d 100%);
+  border-top: 2px solid #317e30;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0;
+  padding: 0;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.player-toolbar .toolbar-button {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a2a1a 100%);
+  color: #888;
+  border: none;
+  border-right: 1px solid #444;
+  padding: 12px 10px;
+  cursor: pointer;
+  font-family: "Libre Baskerville", serif;
+  font-size: 0.85em;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.player-toolbar .toolbar-button:hover {
+  color: #4caf50;
+  background: linear-gradient(135deg, #2a3a2a 0%, #1a2a1a 100%);
+}
+
+.player-toolbar .toolbar-icon {
+  font-size: 1.2em;
+}
+
+.player-toolbar .toolbar-label {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9em;
+}
+
+.player-toolbar .chat-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ff9800;
+  color: #000;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.7em;
+  font-weight: bold;
+  min-width: 18px;
+  text-align: center;
+}
+
+.player-toolbar .toolbar-status {
+  background: rgba(20, 20, 20, 0.5);
+  border-right: 1px solid #444;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #888;
+  font-family: "Libre Baskerville", serif;
+  font-size: 0.85em;
+}
+
+.player-toolbar .toolbar-status.connected {
+  color: #4caf50;
+}
+
+.player-toolbar .toolbar-status.connected .status-icon {
+  color: #4caf50;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.player-toolbar .status-icon {
+  font-size: 0.8em;
+}
+
+.player-toolbar .status-text {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.player-toolbar .toolbar-roomcode {
+  background: rgba(139, 69, 19, 0.3);
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: "Courier New", monospace;
+  font-size: 0.9em;
+}
+
+.player-toolbar .roomcode-label {
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.8em;
+}
+
+.player-toolbar .roomcode-value {
+  color: #d4a574;
+  font-weight: bold;
+  letter-spacing: 3px;
+  font-size: 1.1em;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .player-toolbar {
+    grid-template-columns: 1fr 1fr;
+    font-size: 0.9em;
+  }
+
+  .player-toolbar .toolbar-label {
+    display: none;
+  }
+
+  .player-toolbar .toolbar-icon {
+    font-size: 1.5em;
+  }
+
+  .player-toolbar .toolbar-status,
+  .player-toolbar .toolbar-roomcode {
+    grid-column: span 2;
+  }
+}
+
+/* Quick Reference Modal */
+.quick-ref-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
+
+.quick-ref-modal-content {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d1a0d 100%);
+  border: 2px solid #317e30;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 1200px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7);
+}
+
+.quick-ref-modal-header {
+  background: linear-gradient(135deg, #2a4a2a 0%, #1a3a1a 100%);
+  padding: 20px 30px;
+  border-bottom: 2px solid #317e30;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quick-ref-modal-header h2 {
+  margin: 0;
+  color: #d4a574;
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.5em;
+}
+
+.quick-ref-close {
+  background: transparent;
+  border: none;
+  color: #d4a574;
+  font-size: 1.8em;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  transition: color 0.3s ease;
+}
+
+.quick-ref-close:hover {
+  color: #ff6b6b;
+}
+
+.quick-ref-tabs {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid #444;
+}
+
+.quick-ref-tab {
+  flex: 1;
+  padding: 15px 20px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid #444;
+  color: #888;
+  cursor: pointer;
+  font-family: "Libre Baskerville", serif;
+  font-size: 0.9em;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.quick-ref-tab:last-child {
+  border-right: none;
+}
+
+.quick-ref-tab:hover {
+  background: rgba(49, 126, 48, 0.1);
+  color: #d4a574;
+}
+
+.quick-ref-tab.active {
+  background: rgba(49, 126, 48, 0.2);
+  color: #d4a574;
+  border-bottom: 2px solid #317e30;
+}
+
+.quick-ref-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px;
+}
+
+.quick-ref-tab-content {
+  display: none;
+}
+
+.quick-ref-tab-content.active {
+  display: block;
+}
+
+/* ==================== HORROR MODE OVERRIDES ==================== */
+
+/* Player Toolbar Horror Mode */
+body.horror-mode-active .player-toolbar {
+  background: linear-gradient(135deg, #1a0d0d 0%, #0d0000 100%);
+  border-top: 2px solid #8b0000;
+  box-shadow: 0 -4px 20px rgba(139, 0, 0, 0.5);
+}
+
+body.horror-mode-active .player-toolbar .toolbar-button {
+  background: linear-gradient(135deg, #2a1a1a 0%, #1a0d0d 100%);
+  border-right: 1px solid #660000;
+}
+
+body.horror-mode-active .player-toolbar .toolbar-button:hover {
+  color: #ff6b6b;
+  background: linear-gradient(135deg, #3a1a1a 0%, #2a0d0d 100%);
+}
+
+body.horror-mode-active .player-toolbar .toolbar-status {
+  border-right: 1px solid #660000;
+}
+
+body.horror-mode-active .player-toolbar .toolbar-status.connected {
+  color: #ff6b6b;
+}
+
+body.horror-mode-active .player-toolbar .toolbar-status.connected .status-icon {
+  color: #ff0000;
+}
+
+/* Battle Map Modal Horror Mode */
+body.horror-mode-active #battleMapModal > div > div:first-child {
+  background: linear-gradient(135deg, #1a0d0d 0%, #0d0000 100%) !important;
+  border-bottom: 2px solid #8b0000 !important;
+}
+
+/* Battle Map header - multiple targeting approaches for inline style override */
+body.horror-mode-active
+  #battleMapModal
+  div[style*="border-bottom: 2px solid #4caf50"],
+body.horror-mode-active
+  #battleMapModal
+  div[style*="border-bottom: 2px solid #4CAF50"],
+body.horror-mode-active
+  #battleMapModal
+  div[style*="position: sticky"][style*="top: 0"] {
+  border-bottom: 2px solid #8b0000 !important;
+}
+
+body.horror-mode-active #battleMapModal h2 {
+  color: #ff0000 !important;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+body.horror-mode-active #battleMapModal button {
+  border: 2px solid #8b0000 !important;
+  color: #ff0000 !important;
+}
+
+body.horror-mode-active #battleMapModal button:hover {
+  background: rgba(139, 0, 0, 0.2) !important;
+}
+
+body.horror-mode-active #battleMapModal {
+  border: 3px solid #8b0000 !important;
+  box-shadow: 0 0 30px rgba(139, 0, 0, 0.6) !important;
+}
+
+/* Map Controls in Battle Tab Horror Mode */
+body.horror-mode-active .player-control-button {
+  background: rgba(139, 0, 0, 0.2) !important;
+  border: 2px solid #8b0000 !important;
+  color: #ff6b6b !important;
+}
+
+body.horror-mode-active .player-control-button:hover {
+  background: rgba(139, 0, 0, 0.4) !important;
+  border-color: #ff0000 !important;
+  color: #ff0000 !important;
+  box-shadow: 0 4px 8px rgba(139, 0, 0, 0.3) !important;
+}
+
+body.horror-mode-active .player-control-button.active {
+  background: rgba(139, 0, 0, 0.5) !important;
+  border-color: #ff6b6b !important;
+  color: #fff !important;
+}
+
+/* Map Controls section headers */
+body.horror-mode-active #battleMapModal h3 {
+  color: #ff0000 !important;
+  border-bottom: 2px solid #8b0000 !important;
+}
+
+/* Map Controls Sidebar - more specific targeting */
+body.horror-mode-active #battleMapModal > div > div[style*="position: fixed"] {
+  background: rgba(26, 13, 13, 0.98) !important;
+  border: 2px solid #8b0000 !important;
+  border-left: none !important;
+  box-shadow: 4px 0 20px rgba(139, 0, 0, 0.5) !important;
+}
+
+/* Map Controls Collapse Button */
+body.horror-mode-active #sidebarToggle,
+body.horror-mode-active #battleMapModal button[id="sidebarToggle"] {
+  background: rgba(139, 0, 0, 0.95) !important;
+  border: 2px solid #8b0000 !important;
+  border-left: none !important;
+}
+
+/* Battle Map Canvas Grid Border */
+body.horror-mode-active #battleMapModalCanvas {
+  border: 2px solid #8b0000 !important;
+  box-shadow: 0 0 30px rgba(139, 0, 0, 0.5) !important;
+}

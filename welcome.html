@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Magnus Archives - Firebase Institute</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Libre Baskerville", "Georgia", serif;
+        background: #000000;
+        color: #e0e0e0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Animated Web Background */
+      .web-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+
+      .web {
+        position: absolute;
+        background-image: url("/assets/Web.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0;
+        animation: webFloat 30s ease-in-out infinite;
+      }
+
+      .web:nth-child(1) {
+        width: 800px;
+        height: 800px;
+        top: -20%;
+        left: -10%;
+        animation-delay: 0s;
+        animation-duration: 35s;
+      }
+
+      .web:nth-child(2) {
+        width: 600px;
+        height: 600px;
+        top: 60%;
+        right: -15%;
+        animation-delay: 8s;
+        animation-duration: 40s;
+        animation-name: webFloatReverse;
+      }
+
+      .web:nth-child(3) {
+        width: 500px;
+        height: 500px;
+        bottom: -10%;
+        left: 30%;
+        animation-delay: 15s;
+        animation-duration: 32s;
+      }
+
+      .web:nth-child(4) {
+        width: 700px;
+        height: 700px;
+        top: 40%;
+        left: 60%;
+        animation-delay: 22s;
+        animation-duration: 38s;
+        animation-name: webFloatReverse;
+      }
+
+      .web:nth-child(5) {
+        width: 550px;
+        height: 550px;
+        top: 10%;
+        right: 20%;
+        animation-delay: 5s;
+        animation-duration: 36s;
+      }
+
+      .web:nth-child(6) {
+        width: 650px;
+        height: 650px;
+        bottom: 20%;
+        right: -5%;
+        animation-delay: 12s;
+        animation-duration: 34s;
+        animation-name: webFloatReverse;
+      }
+
+      .web:nth-child(7) {
+        width: 480px;
+        height: 480px;
+        top: 70%;
+        left: 10%;
+        animation-delay: 18s;
+        animation-duration: 42s;
+      }
+
+      .web:nth-child(8) {
+        width: 720px;
+        height: 720px;
+        top: 25%;
+        left: 40%;
+        animation-delay: 26s;
+        animation-duration: 37s;
+        animation-name: webFloatReverse;
+      }
+
+      @keyframes webFloat {
+        0% {
+          opacity: 0;
+          transform: scale(0.8) rotate(0deg) translateY(0);
+        }
+        5% {
+          opacity: 0.2;
+        }
+        50% {
+          opacity: 0.3;
+          transform: scale(1.2) rotate(25deg) translateY(-50px);
+        }
+        95% {
+          opacity: 0.2;
+        }
+        100% {
+          opacity: 0;
+          transform: scale(1) rotate(50deg) translateY(-100px);
+        }
+      }
+
+      @keyframes webFloatReverse {
+        0% {
+          opacity: 0;
+          transform: scale(0.8) rotate(0deg) translateY(0);
+        }
+        5% {
+          opacity: 0.2;
+        }
+        50% {
+          opacity: 0.3;
+          transform: scale(1.2) rotate(-25deg) translateY(-50px);
+        }
+        95% {
+          opacity: 0.2;
+        }
+        100% {
+          opacity: 0;
+          transform: scale(1) rotate(-50deg) translateY(-100px);
+        }
+      }
+
+      .welcome-container {
+        max-width: 900px;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        border: 2px solid #2d5016;
+        border-radius: 12px;
+        padding: 60px 40px;
+        box-shadow:
+          0 0 50px rgba(45, 80, 22, 0.3),
+          inset 0 0 30px rgba(0, 0, 0, 0.5);
+        position: relative;
+        z-index: 1;
+        backdrop-filter: blur(5px);
+      }
+
+      .title-section {
+        text-align: center;
+        margin-bottom: 60px;
+        width: 100%;
+      }
+
+      h1 {
+        color: #4caf50;
+        font-size: 2.2em;
+        margin-bottom: 15px;
+        text-shadow:
+          0 0 20px rgba(76, 175, 80, 0.5),
+          0 0 40px rgba(76, 175, 80, 0.2);
+        letter-spacing: 6px;
+        font-weight: 400;
+        text-transform: uppercase;
+        white-space: nowrap;
+        text-align: center;
+        width: 100%;
+      }
+
+      .subtitle {
+        color: #7cb342;
+        font-size: 1.3em;
+        font-style: italic;
+        margin-top: 10px;
+        text-shadow: 0 0 10px rgba(124, 179, 66, 0.3);
+      }
+
+      .options-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 40px;
+      }
+
+      .option-card {
+        background: rgba(20, 30, 20, 0.6);
+        border: 1px solid #2d5016;
+        border-radius: 8px;
+        padding: 16px 24px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+      }
+
+      .option-card:hover {
+        border-color: #4caf50;
+        transform: translateX(5px);
+        box-shadow: 0 0 25px rgba(76, 175, 80, 0.3);
+        background: rgba(30, 45, 30, 0.8);
+      }
+
+      .option-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(76, 175, 80, 0.15),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .option-card:hover::before {
+        left: 100%;
+      }
+
+      .option-icon {
+        display: none;
+      }
+
+      .option-title {
+        color: #4caf50;
+        font-size: 1.1em;
+        margin: 0;
+        text-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+        letter-spacing: 1px;
+      }
+
+      .option-description {
+        display: none;
+      }
+
+      .join-section {
+        display: none;
+        margin-top: 30px;
+        padding: 30px;
+        background: rgba(20, 30, 20, 0.8);
+        border: 2px solid #2d5016;
+        border-radius: 8px;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .join-section.active {
+        display: block;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-group label {
+        display: block;
+        color: #4caf50;
+        margin-bottom: 8px;
+        font-weight: bold;
+        text-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 12px;
+        background: rgba(10, 15, 10, 0.8);
+        border: 2px solid #2d5016;
+        border-radius: 4px;
+        color: #4caf50;
+        font-family: "Libre Baskerville", "Georgia", serif;
+        font-size: 1.1em;
+        text-align: center;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: #4caf50;
+        box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 12px 24px;
+        background: #2d5016;
+        color: #4caf50;
+        border: 1px solid #4caf50;
+        border-radius: 4px;
+        font-family: "Libre Baskerville", "Georgia", serif;
+        font-size: 1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+      }
+
+      .btn:hover {
+        background: #3d6020;
+        transform: translateY(-1px);
+        box-shadow: 0 0 20px rgba(76, 175, 80, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(40, 40, 40, 0.8);
+        border-color: #2d5016;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(50, 50, 50, 0.9);
+        border-color: #4caf50;
+      }
+
+      .error-message {
+        background: rgba(139, 0, 0, 0.3);
+        border: 1px solid #8b0000;
+        color: #ff6b6b;
+        padding: 12px;
+        border-radius: 4px;
+        margin-top: 15px;
+        display: none;
+        text-align: center;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        margin-top: 20px;
+        color: #4caf50;
+        text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+      }
+
+      .loading.show {
+        display: block;
+      }
+
+      .loading::after {
+        content: "...";
+        animation: dots 1.5s steps(3, end) infinite;
+      }
+
+      @keyframes dots {
+        0%,
+        20% {
+          content: ".";
+        }
+        40% {
+          content: "..";
+        }
+        60%,
+        100% {
+          content: "...";
+        }
+      }
+
+      @media (max-width: 768px) {
+        .welcome-container {
+          padding: 40px 20px;
+        }
+
+        h1 {
+          font-size: 2em;
+        }
+
+        .subtitle {
+          font-size: 1.1em;
+        }
+
+        .option-card {
+          padding: 14px 20px;
+        }
+
+        .option-title {
+          font-size: 1em;
+        }
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 12px;
+        background: rgba(20, 20, 20, 0.8);
+        border: 2px solid #5a5a5a;
+        border-radius: 4px;
+        color: #e0e0e0;
+        font-family: "Courier New", monospace;
+        font-size: 1.1em;
+        text-align: center;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: #8b4513;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 12px 24px;
+        background: #8b4513;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+      }
+
+      .btn:hover {
+        background: #a0511a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn-secondary {
+        background: #5a5a5a;
+      }
+
+      .btn-secondary:hover {
+        background: #6a6a6a;
+      }
+
+      .error-message {
+        background: rgba(139, 0, 0, 0.3);
+        border: 1px solid #8b0000;
+        color: #ff6b6b;
+        padding: 12px;
+        border-radius: 4px;
+        margin-top: 15px;
+        display: none;
+        text-align: center;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        margin-top: 20px;
+        color: #d4a574;
+      }
+
+      .loading.show {
+        display: block;
+      }
+
+      .loading::after {
+        content: "...";
+        animation: dots 1.5s steps(3, end) infinite;
+      }
+
+      @keyframes dots {
+        0%,
+        20% {
+          content: ".";
+        }
+        40% {
+          content: "..";
+        }
+        60%,
+        100% {
+          content: "...";
+        }
+      }
+
+      @media (max-width: 768px) {
+        .welcome-container {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 2em;
+        }
+
+        .option-card {
+          padding: 20px;
+        }
+
+        .option-icon {
+          font-size: 2em;
+        }
+
+        .option-title {
+          font-size: 1.2em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Animated Web Background -->
+    <div class="web-background">
+      <div class="web"></div>
+      <div class="web"></div>
+      <div class="web"></div>
+      <div class="web"></div>
+      <div class="web"></div>
+      <div class="web"></div>
+      <div class="web"></div>
+      <div class="web"></div>
+    </div>
+
+    <div class="welcome-container">
+      <div class="title-section">
+        <h1>THE MAGNUS ARCHIVES ONLINE</h1>
+        <p class="subtitle">Face Your Fears</p>
+        <p class="subtitle">Enter the world of the Magnus Institute.</p>
+        <p class="subtitle">
+          Build your world as Game Master and invite Investigators to unravel
+          mysteries together.
+        </p>
+        <p class="subtitle">
+          Or create your own Investigator dare to venture into the unknown.
+        </p>
+      </div>
+
+      <div class="options-grid" id="mainOptions">
+        <div class="option-card" onclick="startGame()">
+          <div class="option-title">Start a Game (GM)</div>
+        </div>
+
+        <div class="option-card" onclick="showJoinForm()">
+          <div class="option-title">Join a Game (Player)</div>
+        </div>
+
+        <div class="option-card" onclick="createCharacter()">
+          <div class="option-title">Create Character</div>
+        </div>
+      </div>
+
+      <div class="join-section" id="joinSection">
+        <h2
+          style="
+            color: #4caf50;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+          "
+        >
+          Join Game Session
+        </h2>
+
+        <div class="input-group">
+          <label for="roomCode">Room Code:</label>
+          <input
+            type="text"
+            id="roomCode"
+            placeholder="ABCD12"
+            maxlength="6"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="playerName">Your Name:</label>
+          <input
+            type="text"
+            id="playerName"
+            placeholder="Enter your name"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="input-group">
+          <label style="display: flex; align-items: center; gap: 10px">
+            <span style="flex-shrink: 0">Character Sheet:</span>
+            <span
+              id="characterStatus"
+              style="color: #999; font-size: 0.9em; flex: 1"
+              >No character loaded</span
+            >
+          </label>
+          <div style="display: flex; gap: 10px; margin-top: 10px">
+            <button
+              class="btn btn-secondary"
+              onclick="loadFromLocalStorage()"
+              style="flex: 1"
+            >
+              Load from AutoSave
+            </button>
+            <button
+              class="btn btn-secondary"
+              onclick="uploadCharacterFile()"
+              style="flex: 1"
+            >
+              Upload JSON File
+            </button>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button class="btn btn-secondary" onclick="hideJoinForm()">
+            Back
+          </button>
+          <button
+            class="btn"
+            id="joinGameBtn"
+            onclick="joinGame()"
+            disabled
+            style="opacity: 0.5; cursor: not-allowed"
+          >
+            Join Game
+          </button>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="loading" id="loadingMessage">Connecting to game</div>
+      </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <script src="functions/firebase-config.js"></script>
+    <script>
+      let loadedCharacterData = null;
+
+      function startGame() {
+        // Redirect to GM dashboard
+        window.location.href = "gm-dashboard.html";
+      }
+
+      function createCharacter() {
+        // Redirect to character creation
+        window.location.href = "player-view.html?mode=create";
+      }
+
+      function showJoinForm() {
+        document.getElementById("mainOptions").style.display = "none";
+        document.getElementById("joinSection").classList.add("active");
+        document.getElementById("roomCode").focus();
+      }
+
+      function hideJoinForm() {
+        document.getElementById("mainOptions").style.display = "grid";
+        document.getElementById("joinSection").classList.remove("active");
+        document.getElementById("errorMessage").classList.remove("show");
+        document.getElementById("roomCode").value = "";
+        document.getElementById("playerName").value = "";
+        // Reset character data
+        loadedCharacterData = null;
+        updateCharacterStatus();
+      }
+
+      function showError(message) {
+        const errorDiv = document.getElementById("errorMessage");
+        errorDiv.textContent = message;
+        errorDiv.classList.add("show");
+      }
+
+      function hideError() {
+        document.getElementById("errorMessage").classList.remove("show");
+      }
+
+      function showLoading() {
+        document.getElementById("loadingMessage").classList.add("show");
+      }
+
+      function hideLoading() {
+        document.getElementById("loadingMessage").classList.remove("show");
+      }
+
+      function updateCharacterStatus() {
+        const statusSpan = document.getElementById("characterStatus");
+        const joinBtn = document.getElementById("joinGameBtn");
+
+        if (loadedCharacterData) {
+          const charName = loadedCharacterData.name || "Unnamed Character";
+          const charDescriptor = loadedCharacterData.descriptor || "";
+          const charType = loadedCharacterData.type || "";
+          const charTier = loadedCharacterData.tier || 1;
+
+          statusSpan.innerHTML = `✅ <strong style="color: #4caf50;">${charName}</strong> - ${charDescriptor} ${charType} (Tier ${charTier})`;
+          statusSpan.style.color = "#4caf50";
+
+          // Enable join button
+          joinBtn.disabled = false;
+          joinBtn.style.opacity = "1";
+          joinBtn.style.cursor = "pointer";
+        } else {
+          statusSpan.textContent = "No character loaded";
+          statusSpan.style.color = "#999";
+
+          // Disable join button
+          joinBtn.disabled = true;
+          joinBtn.style.opacity = "0.5";
+          joinBtn.style.cursor = "not-allowed";
+        }
+      }
+
+      function loadFromLocalStorage() {
+        try {
+          // Try loading from the full character save system
+          const fullCharacter = localStorage.getItem("magnusCharacter");
+          if (fullCharacter) {
+            const data = JSON.parse(fullCharacter);
+            loadedCharacterData = data;
+            updateCharacterStatus();
+            showError("✅ Character loaded from AutoSave!");
+            setTimeout(() => hideError(), 2000);
+            return;
+          }
+
+          // Fallback to legacy system
+          const savedData = localStorage.getItem("playerCharacter");
+          if (savedData) {
+            const data = JSON.parse(savedData);
+            loadedCharacterData = data;
+            updateCharacterStatus();
+            showError("✅ Character loaded!");
+            setTimeout(() => hideError(), 2000);
+            return;
+          }
+
+          showError(
+            "No saved character found. Please upload a character file or create a new character.",
+          );
+        } catch (error) {
+          console.error("Error loading character:", error);
+          showError("Error loading character: " + error.message);
+        }
+      }
+
+      function uploadCharacterFile() {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".json";
+        input.onchange = (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            try {
+              const data = JSON.parse(event.target.result);
+              loadedCharacterData = data;
+              updateCharacterStatus();
+              showError("✅ Character file loaded successfully!");
+              setTimeout(() => hideError(), 2000);
+            } catch (error) {
+              console.error("Error reading character file:", error);
+              showError("Error reading character file: " + error.message);
+            }
+          };
+          reader.readAsText(file);
+        };
+        input.click();
+      }
+
+      async function joinGame() {
+        const roomCode = document
+          .getElementById("roomCode")
+          .value.trim()
+          .toUpperCase();
+        const playerName = document.getElementById("playerName").value.trim();
+
+        hideError();
+
+        // Validation
+        if (!roomCode || roomCode.length !== 6) {
+          showError("Please enter a valid 6-character room code");
+          return;
+        }
+
+        if (!playerName) {
+          showError("Please enter your name");
+          return;
+        }
+
+        if (!loadedCharacterData) {
+          showError("Please load a character sheet before joining");
+          return;
+        }
+
+        showLoading();
+
+        try {
+          // Check if Firebase is configured
+          if (typeof firebase === "undefined" || !firebase.apps.length) {
+            throw new Error(
+              "Firebase not configured. Please set up firebase-config.js",
+            );
+          }
+
+          const db = firebase.database();
+
+          // Check if room exists
+          const roomRef = db.ref("rooms/" + roomCode);
+          const snapshot = await roomRef.once("value");
+
+          if (!snapshot.exists()) {
+            hideLoading();
+            showError("Room not found. Please check the room code.");
+            return;
+          }
+
+          const roomData = snapshot.val();
+
+          if (roomData.status === "closed") {
+            hideLoading();
+            showError("This game session has ended.");
+            return;
+          }
+
+          // Store player info in session storage
+          sessionStorage.setItem("roomCode", roomCode);
+          sessionStorage.setItem("playerName", playerName);
+          sessionStorage.setItem("playerId", "player_" + Date.now());
+          sessionStorage.setItem(
+            "loadedCharacter",
+            JSON.stringify(loadedCharacterData),
+          );
+
+          // Redirect to player view
+          window.location.href = "player-view.html?mode=play&room=" + roomCode;
+        } catch (error) {
+          console.error("Error joining game:", error);
+          hideLoading();
+          showError("Error connecting to game: " + error.message);
+        }
+      }
+
+      // Allow Enter key to submit
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("roomCode")
+          .addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              document.getElementById("playerName").focus();
+            }
+          });
+
+        document
+          .getElementById("playerName")
+          .addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              joinGame();
+            }
+          });
+
+        // Auto-format room code to uppercase
+        document
+          .getElementById("roomCode")
+          .addEventListener("input", function (e) {
+            e.target.value = e.target.value.toUpperCase();
+          });
+      });
+    </script>
+  </body>
+</html>
