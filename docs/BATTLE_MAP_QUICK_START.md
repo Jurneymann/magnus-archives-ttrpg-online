@@ -28,13 +28,15 @@
 
 ### Terrain Colors
 
-| Type      | Color                  | Passable |
-| --------- | ---------------------- | -------- |
-| Wall      | Dark Gray (#424242)    | No       |
-| Furniture | Dark Brown (#6D4C41)   | No       |
-| Landscape | Green (#2E7D32)        | Yes      |
-| Water     | Blue (#1976D2)         | Yes      |
-| Difficult | Yellow-Amber (#F9A825) | Yes      |
+| Type      | Color                  | Passable | Notes |
+| --------- | ---------------------- | -------- | ----- |
+| Wall      | Dark Gray (#424242)    | No       | Square or edge |
+| Door      | Brown (#8B4513)        | Yes      | Square or edge |
+| Window    | Sky Blue (#87CEEB)     | No       | Square or edge |
+| Furniture | Dark Brown (#6D4C41)   | No       | Square only |
+| Landscape | Green (#2E7D32)        | Yes      | Square only |
+| Water     | Blue (#1976D2)         | Yes      | Square only |
+| Difficult | Yellow-Amber (#F9A825) | Yes      | Square only |
 
 ## Quick Workflow
 
@@ -101,13 +103,19 @@ Step 3: Click destination square
 
 ```
 Step 1: Select terrain tool
-   (🧱 Wall, 🪑 Furniture, etc.)
+   (🧱 Wall, 🚪 Door, 🪟 Window, 🪑 Furniture, etc.)
    ↓
-Step 2: Click squares to place
-   (Click same square to change)
+Step 2: Choose draw mode (Wall/Door/Window only)
+   ⬛ Square - fills whole grid squares
+   ⬜ Edge   - draws thin lines on cell borders
    ↓
-Step 3: Switch to 🗑️ Erase to remove
+Step 3: Click/drag on the map to place
+   ↓
+Step 4: Switch to 🗑️ Erase to remove
+   (Match the draw mode to erase the right type)
 ```
+
+**Edge Mode tip**: Use Edge walls to draw realistic building outlines — the wall sits on the border between two squares rather than filling one, giving a clean floor-plan look. Place a Door in the same Edge Mode to create an opening in the wall line.
 
 ## Example Scenario
 
@@ -164,10 +172,14 @@ Step 3: Switch to 🗑️ Erase to remove
 │ Width: [  10  ]m    Height: [  10  ]m          │
 │ [➕ Zoom In] [➖ Zoom Out] [↻ Reset]           │
 │                                                  │
+│ WALL DRAW MODE:                                  │
+│ [⬛ Square Mode]  [⬜ Edge Mode]                │
+│ (visible when Wall, Door or Window selected)     │
+│                                                  │
 │ TERRAIN TOOLS:                                   │
-│ [🖐️ Move] [🧱 Wall] [🪑 Furniture]             │
-│ [🌳 Landscape] [💧 Water] [⚠️ Difficult]       │
-│ [🗑️ Erase]                                      │
+│ [🧱 Wall]  [🚪 Door]   [🪟 Window]             │
+│ [🪑 Furniture] [🌳 Landscape] [💧 Water]       │
+│ [⚠️ Difficult] [🗑️ Erase]                      │
 │                                                  │
 │ [Clear All Terrain] [💾 Save Map] [📂 Load Map]│
 └─────────────────────────────────────────────────┘

@@ -36,12 +36,30 @@ The Battle Map System provides comprehensive visual position tracking for combat
 - **🔄 Rotate**: Change combatant facing direction
 - **⬆️ Elevation**: Adjust vertical position (flying, climbing)
 - **📏 Measure**: Measure distances between points
-- **🧱 Wall**: Place impassable walls (gray)
+- **🧱 Wall**: Place impassable walls (dark gray)
+- **🚪 Door**: Place passable doorways (brown) – combatants can move through
+- **🪟 Window**: Place impassable windows (sky blue) – blocks movement but not line of sight
 - **🪑 Furniture**: Add furniture obstacles (brown)
 - **🌳 Landscape**: Create scenery elements (green)
 - **💧 Water**: Mark water areas (blue)
 - **⚠️ Difficult**: Designate difficult terrain (orange)
 - **🗑️ Erase**: Remove terrain
+
+### Wall Draw Modes
+
+When the **Wall**, **Door**, or **Window** tool is selected, two draw modes are available via the toggle above the terrain buttons:
+
+- **⬛ Square Mode** *(default)*: Fills entire grid squares with the selected terrain type. Best for thick walls, solid room interiors, and large obstacles.
+- **⬜ Edge Mode**: Draws thin lines on the *edge* between two grid squares rather than filling a whole square. Perfect for realistic building walls, doors in doorframes, and windows set into walls.
+
+**How Edge Mode works:**
+1. Select **Wall**, **Door**, or **Window** tool
+2. Click **⬜ Edge** button to switch to Edge Mode
+3. Click and drag across the map — the nearest cell edge (north, south, east, or west side) is highlighted
+4. Release to place the edge element
+5. Edge walls appear as thin colored lines on cell borders rather than filled squares
+
+Edge walls are stored separately from square terrain and can be removed with the **Erase** tool in Edge Mode.
 
 ### Dynamic Lighting System
 
@@ -155,10 +173,12 @@ The Battle Map System provides comprehensive visual position tracking for combat
 
 ### Adding Terrain
 
-1. **Select a terrain tool** (Wall, Furniture, etc.)
-2. **Click on grid squares** to place terrain
-3. **Click the same square again** to change terrain type
-4. **Use the Erase tool** to remove terrain
+1. **Select a terrain tool** (Wall, Door, Window, Furniture, etc.)
+2. **Choose draw mode** (Square or Edge — visible when Wall/Door/Window is selected):
+   - **Square Mode**: Click grid squares to fill them
+   - **Edge Mode**: Click and drag along cell borders to draw thin lines
+3. **Click on grid squares** to place terrain (Square Mode) or drag across borders (Edge Mode)
+4. **Use the Erase tool** to remove terrain — switch to Edge Mode first to erase edge walls
 
 ### Setting Up Dynamic Lighting
 
@@ -308,11 +328,16 @@ An example warehouse map (`battle-map-template.json`) is included in the `databa
 
 ### Terrain Strategy
 
-- **Walls**: Create rooms, hallways, and cover
+- **Walls (Square)**: Thick walls, solid pillars, and filled obstacles
+- **Walls (Edge)**: Realistic thin building walls — draw the perimeter of a room on cell edges for a clean floor plan look
+- **Doors**: Mark actual doorways; use Edge Mode to place them precisely in a wall line
+- **Windows**: Indicate glass or arrow slits — characters can't pass but light and line of sight can
 - **Furniture**: Add tactical complexity with partial cover
 - **Difficult Terrain**: Slow movement through cluttered areas
 - **Water/Landscape**: Environmental hazards and flavor
 - Use terrain to create chokepoints and tactical options
+
+**Tip — Building interiors**: Use Edge Mode walls for exterior walls, Square Mode furniture for internal obstacles, and Edge Mode doors where entrances should be. This gives a clean top-down floor plan appearance.
 
 ### Combatant Management
 
@@ -343,8 +368,15 @@ Maps are saved as JSON with the following structure:
     {
       "x": 3,
       "y": 4,
-      "type": "wall",
-      "color": "#666666"
+      "type": "wall"
+    }
+  ],
+  "edgeWalls": [
+    {
+      "x": 3,
+      "y": 4,
+      "edge": "s",
+      "type": "door"
     }
   ],
   "lights": [
@@ -361,13 +393,36 @@ Maps are saved as JSON with the following structure:
 }
 ```
 
+### Edge Wall Properties
+
+- `x`, `y`: Grid coordinates of the cell
+- `edge`: Which side of the cell — `"n"` (north/top), `"s"` (south/bottom), `"e"` (east/right), `"w"` (west/left)
+- `type`: `"wall"`, `"door"`, or `"window"`
+```
+
 ### Terrain Types
 
-- `wall`: Impassable barriers (Dark Gray #424242)
-- `furniture`: Obstacles and cover (Dark Brown #6D4C41)
-- `landscape`: Trees, rocks, scenery (Green #2E7D32)
-- `water`: Water features (Blue #1976D2)
-- `difficult`: Rough or cluttered ground (Yellow-Amber #F9A825)
+**Square terrain** (fills a full grid cell):
+
+| Type | Color | Passable | Notes |
+|---|---|---|---|
+| `wall` | Dark Gray `#424242` | No | Impassable solid barrier |
+| `door` | Brown `#8B4513` | Yes | Combatants can pass through |
+| `window` | Sky Blue `#87CEEB` | No | Blocks movement, not line of sight |
+| `furniture` | Dark Brown `#6D4C41` | No | Obstacles and cover |
+| `landscape` | Green `#2E7D32` | Yes | Trees, rocks, scenery |
+| `water` | Blue `#1976D2` | Yes | Water features |
+| `difficult` | Yellow-Amber `#F9A825` | Yes | Rough or cluttered ground |
+
+**Edge terrain** (drawn on the border between two cells):
+
+| Type | Color | Passable | Notes |
+|---|---|---|---|
+| `wall` | Dark Gray `#424242` | No | Thin wall along a cell edge |
+| `door` | Brown `#8B4513` | Yes | Door set into a wall edge |
+| `window` | Sky Blue `#87CEEB` | No | Window set into a wall edge |
+
+Edge walls use the same terrain type with the extra data `{ x, y, edge: 'n'|'s'|'e'|'w' }` indicating which side of the cell they occupy.
 
 ### Light Properties
 
@@ -483,6 +538,17 @@ The Battle Map system includes comprehensive keyboard navigation and screen read
 
 ## Version History
 
+### Version 2.3 (March 2026)
+
+- ✅ Added **Door** (🚪) terrain tool — passable brown terrain
+- ✅ Added **Window** (🪟) terrain tool — impassable sky-blue terrain
+- ✅ Added **Wall Draw Mode** toggle (⬛ Square / ⬜ Edge)
+  - Square Mode fills full grid cells (existing behaviour)
+  - Edge Mode draws thin wall/door/window lines on cell borders
+- ✅ Added **Layer Switching UI** — layer selector in battle map panel
+- ✅ Combatants can be moved between layers via token context menu
+- ✅ Fixed details containers collapsing on button clicks within Use Map panel
+
 ### Version 2.0 (January 2026)
 
 - ✅ Added smooth token movement animations (0.4s transitions)
@@ -523,6 +589,6 @@ For issues or feature requests, please contact the tool maintainer or submit an 
 
 ---
 
-**Battle Map System v2.0**  
+**Battle Map System v2.3**  
 _Part of the Magnus Archives GM Tool_  
-_Updated: January 2026_
+_Updated: March 2026_
