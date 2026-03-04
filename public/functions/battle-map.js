@@ -102,6 +102,95 @@ let battleMap = {
   },
 };
 
+// ==================== UNDO/REDO HISTORY ==================== //
+
+const battleMapHistory = {
+  past: [],    // Terrain snapshots (oldest → newest)
+  future: [],  // Terrain snapshots for redo (most recent first)
+  maxSize: 50, // Cap to prevent memory bloat
+};
+
+/**
+ * Capture a lightweight snapshot of all layers' terrain before a destructive action.
+ * Must be called immediately before any terrain mutation.
+ */
+function saveBattleMapSnapshot() {
+  const snapshot = battleMap.layers.map((layer) => ({
+    id: layer.id,
+    terrain: JSON.parse(JSON.stringify(layer.terrain)),
+    edgeWalls: JSON.parse(JSON.stringify(layer.edgeWalls)),
+  }));
+
+  battleMapHistory.past.push(snapshot);
+
+  // Enforce size cap
+  if (battleMapHistory.past.length > battleMapHistory.maxSize) {
+    battleMapHistory.past.shift();
+  }
+
+  // Any new edit clears the redo stack
+  battleMapHistory.future = [];
+  updateUndoRedoButtons();
+}
+
+/** Return the current terrain state as a snapshot (used by undo/redo internally). */
+function getCurrentTerrainSnapshot() {
+  return battleMap.layers.map((layer) => ({
+    id: layer.id,
+    terrain: JSON.parse(JSON.stringify(layer.terrain)),
+    edgeWalls: JSON.parse(JSON.stringify(layer.edgeWalls)),
+  }));
+}
+
+/** Restore a terrain snapshot to the live layers. */
+function applyTerrainSnapshot(snapshot) {
+  snapshot.forEach((snap) => {
+    const layer = battleMap.layers.find((l) => l.id === snap.id);
+    if (layer) {
+      layer.terrain = snap.terrain;
+      layer.edgeWalls = snap.edgeWalls;
+    }
+  });
+}
+
+/** Undo the last terrain operation. */
+function undoBattleMapAction() {
+  if (battleMapHistory.past.length === 0) return;
+  battleMapHistory.future.push(getCurrentTerrainSnapshot());
+  const previous = battleMapHistory.past.pop();
+  applyTerrainSnapshot(previous);
+  renderBattleMap();
+  saveBattleMapState();
+  updateUndoRedoButtons();
+}
+
+/** Redo the last undone terrain operation. */
+function redoBattleMapAction() {
+  if (battleMapHistory.future.length === 0) return;
+  battleMapHistory.past.push(getCurrentTerrainSnapshot());
+  const next = battleMapHistory.future.pop();
+  applyTerrainSnapshot(next);
+  renderBattleMap();
+  saveBattleMapState();
+  updateUndoRedoButtons();
+}
+
+/** Sync undo/redo button appearances with history stack lengths. */
+function updateUndoRedoButtons() {
+  const undoBtn = document.getElementById("bmUndoBtn");
+  const redoBtn = document.getElementById("bmRedoBtn");
+  if (undoBtn) {
+    undoBtn.disabled = battleMapHistory.past.length === 0;
+    undoBtn.style.opacity = battleMapHistory.past.length === 0 ? "0.35" : "1";
+    undoBtn.title = `Undo (Ctrl+Z) — ${battleMapHistory.past.length} step${battleMapHistory.past.length !== 1 ? "s" : ""}`;
+  }
+  if (redoBtn) {
+    redoBtn.disabled = battleMapHistory.future.length === 0;
+    redoBtn.style.opacity = battleMapHistory.future.length === 0 ? "0.35" : "1";
+    redoBtn.title = `Redo (Ctrl+Y) — ${battleMapHistory.future.length} step${battleMapHistory.future.length !== 1 ? "s" : ""}`;
+  }
+}
+
 // Helper functions to work with active layer
 function getActiveLayer() {
   return (
@@ -286,6 +375,7 @@ function setWallDrawMode(mode) {
   updateToolButtonStates();
   renderBattleMapControls();
   saveBattleMapState();
+  updateUndoRedoButtons();
 }
 
 /**
@@ -475,6 +565,28 @@ function renderBattleMapControls() {
                   style="flex: 1; padding: 4px; font-size: 0.65em; ${battleMap.wallDrawMode === "edge" ? "box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);" : "opacity: 0.6;"}"
                   title="Draw walls on cell edges">
                   ⬜ Edge
+                </button>
+              </div>
+              
+              <!-- Undo / Redo -->
+              <div style="display: flex; gap: 4px; margin-bottom: 6px;">
+                <button 
+                  id="bmUndoBtn"
+                  onclick="undoBattleMapAction()"
+                  ${battleMapHistory.past.length === 0 ? "disabled" : ""}
+                  style="flex: 1; padding: 5px 4px; font-size: 0.7em; background: rgba(33, 150, 243, 0.15); border: 1px solid #2196f3; border-radius: 4px; color: #90CAF9; cursor: pointer; opacity: ${battleMapHistory.past.length === 0 ? "0.35" : "1"};"
+                  title="Undo (Ctrl+Z) &mdash; ${battleMapHistory.past.length} step${battleMapHistory.past.length !== 1 ? "s" : ""}"
+                >
+                  ↩ Undo
+                </button>
+                <button 
+                  id="bmRedoBtn"
+                  onclick="redoBattleMapAction()"
+                  ${battleMapHistory.future.length === 0 ? "disabled" : ""}
+                  style="flex: 1; padding: 5px 4px; font-size: 0.7em; background: rgba(33, 150, 243, 0.15); border: 1px solid #2196f3; border-radius: 4px; color: #90CAF9; cursor: pointer; opacity: ${battleMapHistory.future.length === 0 ? "0.35" : "1"};"
+                  title="Redo (Ctrl+Y) &mdash; ${battleMapHistory.future.length} step${battleMapHistory.future.length !== 1 ? "s" : ""}"
+                >
+                  ↪ Redo
                 </button>
               </div>
               
@@ -3386,6 +3498,8 @@ function handleBattleMapClick(rawX, rawY) {
     // Remove terrain or edge walls
     const layer = getActiveLayer();
 
+    saveBattleMapSnapshot(); // snapshot before erase
+
     if (battleMap.wallDrawMode === "edge") {
       // Determine which edge was clicked based on raw coordinates
       const edge = determineNearestEdge(rawX, rawY, x, y);
@@ -3467,6 +3581,8 @@ function handleBattleMapClick(rawX, rawY) {
         const endX = corner.x;
         const endY = corner.y;
 
+        saveBattleMapSnapshot(); // snapshot before committing edge wall line
+
         // Draw walls between corners
         drawWallsBetweenCorners(
           startX,
@@ -3486,6 +3602,7 @@ function handleBattleMapClick(rawX, rawY) {
       }
     } else {
       // Place square terrain (normal mode)
+      saveBattleMapSnapshot(); // snapshot before placing square terrain
       // Remove existing terrain at this location first
       layer.terrain = layer.terrain.filter((t) => !(t.x === x && t.y === y));
       // Add new terrain
@@ -5664,6 +5781,7 @@ function clearBattleMapTerrain() {
       "Are you sure you want to clear all terrain from the map?\n\nCombatant positions will be preserved.",
     )
   ) {
+    saveBattleMapSnapshot(); // snapshot before clearing
     const layer = getActiveLayer();
     layer.terrain = [];
     renderBattleMap();
@@ -6000,6 +6118,20 @@ function handleBattleMapKeyPress(e) {
   }
 
   const layer = getActiveLayer();
+
+  // Ctrl+Z / Ctrl+Y / Ctrl+Shift+Z — Undo/Redo
+  if (e.ctrlKey && !e.altKey) {
+    if (e.key === "z" && !e.shiftKey) {
+      e.preventDefault();
+      undoBattleMapAction();
+      return;
+    }
+    if (e.key === "y" || (e.key === "z" && e.shiftKey) || (e.key === "Z" && e.shiftKey)) {
+      e.preventDefault();
+      redoBattleMapAction();
+      return;
+    }
+  }
 
   // Tool shortcuts (M, T, L, R, E, Z, F, A, G)
   if (!e.ctrlKey && !e.altKey && !e.metaKey) {

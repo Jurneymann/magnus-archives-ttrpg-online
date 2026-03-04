@@ -16,15 +16,15 @@ The primary state object for the active map:
 
 ```javascript
 const battleMap = {
-  width: 10,              // Map width in metres
-  height: 10,             // Map height in metres
-  gridSize: 40,           // Pixels per square at zoom 1.0
-  zoom: 1.0,              // Current zoom level (0.5 – 2.0)
-  layers: [],             // Array of layer objects (see below)
-  activeLayer: 0,         // Index of the currently active layer
+  width: 10, // Map width in metres
+  height: 10, // Map height in metres
+  gridSize: 40, // Pixels per square at zoom 1.0
+  zoom: 1.0, // Current zoom level (0.5 – 2.0)
+  layers: [], // Array of layer objects (see below)
+  activeLayer: 0, // Index of the currently active layer
   combatantPositions: {}, // { combatantId: { x, y } }
   selectedCombatant: null,
-  selectedTool: "move",   // Active tool: "move" | terrain type | "erase"
+  selectedTool: "move", // Active tool: "move" | terrain type | "erase"
 };
 ```
 
@@ -48,7 +48,7 @@ Each entry in `battleMap.layers[]`:
 Defined in the `terrainTypes` object (~line 147 of `battle-map.js`):
 
 | Type        | Colour    | Passable | Use Case                         |
-|-------------|-----------|----------|----------------------------------|
+| ----------- | --------- | -------- | -------------------------------- |
 | `wall`      | `#424242` | No       | Solid walls, impassable barriers |
 | `door`      | `#8B4513` | Yes      | Doors, archways, openings        |
 | `window`    | `#87CEEB` | No       | Windows, glass panels            |
@@ -59,7 +59,7 @@ Defined in the `terrainTypes` object (~line 147 of `battle-map.js`):
 
 ### Edge Walls
 
-Edge walls are drawn on cell *borders* rather than filling a cell. Each entry in `layer.edgeWalls[]`:
+Edge walls are drawn on cell _borders_ rather than filling a cell. Each entry in `layer.edgeWalls[]`:
 
 ```javascript
 {
@@ -93,6 +93,50 @@ In edge mode, the mouse position within a cell is compared against the centre po
 
 ---
 
+## Undo/Redo System
+
+### State Object
+
+```javascript
+const battleMapHistory = {
+  past: [],    // Terrain snapshots (oldest → newest), max 50 entries
+  future: [],  // Redo stack (most recent first)
+  maxSize: 50,
+};
+```
+
+Each snapshot is a lightweight array of `{ id, terrain, edgeWalls }` per layer — combatant positions, lights, AoE templates, and fog-of-war data are **not** included.
+
+### Snapshot Trigger Points
+
+`saveBattleMapSnapshot()` is called immediately **before** any terrain mutation:
+
+| Operation             | Trigger location in code                                      |
+|-----------------------|---------------------------------------------------------------|
+| Erase (square or edge)| Top of the erase branch in `handleBattleMapClick()`           |
+| Edge wall line        | Before `drawWallsBetweenCorners()` on the second corner click |
+| Square terrain paint  | Before `layer.terrain.push()` in `handleBattleMapClick()`     |
+| Clear all terrain     | Before `layer.terrain = []` in `clearBattleMapTerrain()`      |
+
+### History Stack Behaviour
+
+- Any new terrain edit clears the redo (`future`) stack
+- The `past` stack is capped at 50 entries; oldest entry is dropped when the limit is exceeded
+- Undo/redo both call `renderBattleMap()` and `saveBattleMapState()` so the canvas and localStorage remain in sync
+- The history is **in-memory only** — it does not persist across page refreshes
+
+### Keyboard Shortcuts
+
+| Shortcut        | Action |
+|-----------------|--------|
+| `Ctrl+Z`        | Undo   |
+| `Ctrl+Y`        | Redo   |
+| `Ctrl+Shift+Z`  | Redo   |
+
+These are handled inside the existing `handleBattleMapKeyPress()` listener, which already guards against firing when an `<input>` or `<textarea>` is focused.
+
+---
+
 ## Layer System
 
 ### Layer Management
@@ -104,15 +148,15 @@ In edge mode, the mouse position within a cell is compared against the centre po
 
 ### Layer Functions
 
-| Function                    | Description                                   |
-|-----------------------------|-----------------------------------------------|
-| `addLayer()`                | Adds a new layer above the current active one |
-| `deleteLayer()`             | Removes the active layer (min 1 must remain)  |
-| `setActiveLayer(index)`     | Changes which layer receives edits            |
-| `moveLayerUp(index)`        | Swaps layer with the one above it             |
-| `moveLayerDown(index)`      | Swaps layer with the one below it             |
-| `toggleLayerVisibility(i)`  | Toggles `visible` flag for layer `i`         |
-| `toggleLayerLock(i)`        | Toggles `locked` flag for layer `i`          |
+| Function                   | Description                                   |
+| -------------------------- | --------------------------------------------- |
+| `addLayer()`               | Adds a new layer above the current active one |
+| `deleteLayer()`            | Removes the active layer (min 1 must remain)  |
+| `setActiveLayer(index)`    | Changes which layer receives edits            |
+| `moveLayerUp(index)`       | Swaps layer with the one above it             |
+| `moveLayerDown(index)`     | Swaps layer with the one below it             |
+| `toggleLayerVisibility(i)` | Toggles `visible` flag for layer `i`          |
+| `toggleLayerLock(i)`       | Toggles `locked` flag for layer `i`           |
 
 ---
 
@@ -138,18 +182,22 @@ The GM can ping a location on the map to draw players' attention:
 
 ## Exposed Global Functions
 
-| Function                       | Description                                          |
-|--------------------------------|------------------------------------------------------|
-| `initializeBattleMap()`        | One-time setup on first open; renders initial grid   |
-| `syncBattleMapWithCombat()`    | Pushes current combatants from combat tracker to map |
-| `clearBattleMap()`             | Clears all combatant positions                       |
-| `saveBattleMapState()`         | Serialises full state to localStorage                |
-| `loadBattleMapState()`         | Restores state from localStorage                     |
-| `setWallDrawMode(mode)`        | Switches between `"square"` / `"edge"` draw modes   |
-| `handleBattleMapPings(data)`   | Renders animated ping markers from Firebase data     |
-| `toggleBattleMapVisibility()`  | Shares / unshares the map with connected players     |
-| `saveBattleMapPreset(name)`    | Saves current map to a named preset                  |
-| `loadBattleMapPreset(name)`    | Loads and renders a saved preset                     |
+| Function                      | Description                                          |
+| ----------------------------- | ---------------------------------------------------- |
+| `initializeBattleMap()`       | One-time setup on first open; renders initial grid   |
+| `syncBattleMapWithCombat()`   | Pushes current combatants from combat tracker to map |
+| `clearBattleMap()`            | Clears all combatant positions                       |
+| `saveBattleMapState()`        | Serialises full state to localStorage                |
+| `loadBattleMapState()`        | Restores state from localStorage                     |
+| `setWallDrawMode(mode)`       | Switches between `"square"` / `"edge"` draw modes    |
+| `handleBattleMapPings(data)`  | Renders animated ping markers from Firebase data     |
+| `toggleBattleMapVisibility()` | Shares / unshares the map with connected players     |
+| `saveBattleMapPreset(name)`   | Saves current map to a named preset                  |
+| `loadBattleMapPreset(name)`   | Loads and renders a saved preset                     |
+| `undoBattleMapAction()`       | Reverts the last terrain edit (up to 50 steps)       |
+| `redoBattleMapAction()`       | Re-applies the last undone terrain edit              |
+| `saveBattleMapSnapshot()`     | Captures a terrain snapshot before a destructive op  |
+| `updateUndoRedoButtons()`     | Syncs Undo/Redo button state with history stacks     |
 
 ---
 
@@ -160,6 +208,7 @@ The GM can ping a location on the map to draw players' attention:
 - **Map size inputs** — width/height in metres
 - **Zoom controls** — 50%–200% with live feedback
 - **Wall Draw Mode toggle** — ⬛ Square (fill cells) / ⬜ Edge (draw on borders)
+- **Undo / Redo buttons** — ↩ Undo and ↪ Redo, up to 50 steps; keyboard shortcuts Ctrl+Z / Ctrl+Y
 - **Terrain tool buttons** — Wall, Door, Window, Furniture, Landscape, Water, Difficult, Erase
 - **Layer panel** — add, remove, reorder, lock, hide layers
 - **Action buttons** — Save, Load, Clear, Share (multiplayer)
@@ -193,10 +242,10 @@ The GM can ping a location on the map to draw players' attention:
 - [x] Battle map pings (animated markers)
 - [x] Integration with combat tracker
 - [x] Auto-placement of new combatants
+- [x] Undo/redo (50-step history, Ctrl+Z / Ctrl+Y)
 
 ### ⏳ Not Yet Implemented
 
-- [ ] Undo/redo
 - [ ] Canvas-based rendering (currently DOM)
 - [ ] Touch/mobile optimisation
 - [ ] Export map as image
@@ -239,7 +288,7 @@ The GM can ping a location on the map to draw players' attention:
 ### LocalStorage Keys
 
 | Key                | Contents                                            |
-|--------------------|-----------------------------------------------------|
+| ------------------ | --------------------------------------------------- |
 | `battleMapState`   | Full serialised map including all layers/edge walls |
 | `battleMapPresets` | Saved named preset objects keyed by preset name     |
 
@@ -257,12 +306,8 @@ The GM can ping a location on the map to draw players' attention:
       "name": "Ground",
       "visible": true,
       "locked": false,
-      "terrain": [
-        { "x": 0, "y": 0, "type": "wall" }
-      ],
-      "edgeWalls": [
-        { "x": 3, "y": 2, "edge": "n", "type": "door" }
-      ]
+      "terrain": [{ "x": 0, "y": 0, "type": "wall" }],
+      "edgeWalls": [{ "x": 3, "y": 2, "edge": "n", "type": "door" }]
     }
   ],
   "combatantPositions": {
@@ -320,22 +365,23 @@ rooms/{roomCode}/battleMapPings/
 ## Known Limitations
 
 1. **DOM Rendering** — No canvas fallback; 50×50 maps with many tokens can be slow
-2. **No Undo/Redo** — Terrain placement is permanent until manually erased
-3. **Full-state sync** — Multiplayer writes the entire map on each update, not just deltas
-4. **Edge walls are layer-specific** — An edge wall cannot span across layers
+2. **Full-state sync** — Multiplayer writes the entire map on each update, not just deltas
+3. **Edge walls are layer-specific** — An edge wall cannot span across layers
+4. **Undo history not persisted** — The undo stack is in-memory only; refreshing the page clears it
 
 ---
 
 ## Version History
 
-| Version | Date     | Notes                                                                       |
-|---------|----------|-----------------------------------------------------------------------------|
-| v1.0    | Jan 2026 | Initial: basic grid, 6 terrain types, tokens, zoom, save/load (~600 lines) |
-| v2.0    | Feb 2026 | Layer system, multiplayer sync, battle map pings, preset management         |
-| v2.3    | Mar 2026 | Edge wall draw mode, door + window terrain types, UI overhaul (~6,700 lines)|
+| Version | Date     | Notes                                                                                   |
+| ------- | -------- | --------------------------------------------------------------------------------------- |
+| v1.0    | Jan 2026 | Initial: basic grid, 6 terrain types, tokens, zoom, save/load (~600 lines)              |
+| v2.0    | Feb 2026 | Layer system, multiplayer sync, battle map pings, preset management                     |
+| v2.3    | Mar 2026 | Edge wall draw mode, door + window terrain types, UI overhaul (~6,700 lines)            |
+| v2.4    | Mar 2026 | Undo/redo (50-step history per session, Ctrl+Z / Ctrl+Y + toolbar buttons)              |
 
 ---
 
-**Version:** 2.3  
+**Version:** 2.4  
 **Date:** March 2026  
 **Status:** Active Development
