@@ -708,6 +708,182 @@
                 </div>
               </div>
 
+              <!-- ========== VOICE OF THE FEARS ========== -->
+              <details
+                id="voiceOfFearsPanel"
+                style="margin-top: 12px; border: 1px solid #3a1a4a; border-radius: 6px; background: rgba(10,0,16,0.5);"
+              >
+                <summary style="
+                  padding: 8px 12px;
+                  cursor: pointer;
+                  font-size: 0.85em;
+                  color: #CE93D8;
+                  letter-spacing: 0.08em;
+                  user-select: none;
+                  list-style: none;
+                ">👁 Voice of the Fears</summary>
+                <div style="padding: 10px 12px 12px;">
+
+                  <!-- Entity selector grid -->
+                  <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 10px;" id="fearEntityGrid">
+                    <button class="fear-entity-btn" data-entity="eye"
+                      onclick="selectFearEntity('eye')" title="The Eye"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #FF8F0055;color:#FF8F00aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      👁 Eye
+                    </button>
+                    <button class="fear-entity-btn" data-entity="web"
+                      onclick="selectFearEntity('web')" title="The Web"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #9C27B055;color:#9C27B0aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      🕸 Web
+                    </button>
+                    <button class="fear-entity-btn" data-entity="spiral"
+                      onclick="selectFearEntity('spiral')" title="The Spiral"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #E91E6355;color:#E91E63aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      🌀 Spiral
+                    </button>
+                    <button class="fear-entity-btn" data-entity="dark"
+                      onclick="selectFearEntity('dark')" title="The Dark"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #607D8B55;color:#607D8Baa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      🌑 Dark
+                    </button>
+                    <button class="fear-entity-btn" data-entity="buried"
+                      onclick="selectFearEntity('buried')" title="The Buried"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #A1887F55;color:#A1887Faa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      ⬛ Buried
+                    </button>
+                    <button class="fear-entity-btn" data-entity="desolation"
+                      onclick="selectFearEntity('desolation')" title="The Desolation"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #FF572255;color:#FF5722aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      🔥 Desol.
+                    </button>
+                    <button class="fear-entity-btn" data-entity="corruption"
+                      onclick="selectFearEntity('corruption')" title="The Corruption"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #8BC34A55;color:#8BC34Aaa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      🦠 Corrupt.
+                    </button>
+                    <button class="fear-entity-btn" data-entity="lonely"
+                      onclick="selectFearEntity('lonely')" title="The Lonely"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #546E7A55;color:#546E7Aaa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      💙 Lonely
+                    </button>
+                    <button class="fear-entity-btn" data-entity="slaughter"
+                      onclick="selectFearEntity('slaughter')" title="The Slaughter"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #F4433655;color:#F44336aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      🩸 Slaught.
+                    </button>
+                    <button class="fear-entity-btn" data-entity="hunt"
+                      onclick="selectFearEntity('hunt')" title="The Hunt"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #4CAF5055;color:#4CAF50aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      🗡 Hunt
+                    </button>
+                    <button class="fear-entity-btn" data-entity="flesh"
+                      onclick="selectFearEntity('flesh')" title="The Flesh"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #F0629255;color:#F06292aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      🩻 Flesh
+                    </button>
+                    <button class="fear-entity-btn" data-entity="stranger"
+                      onclick="selectFearEntity('stranger')" title="The Stranger"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #B0BEC555;color:#B0BEC5aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      👤 Stranger
+                    </button>
+                    <button class="fear-entity-btn" data-entity="vast"
+                      onclick="selectFearEntity('vast')" title="The Vast"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #5C6BC055;color:#5C6BC0aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      🌌 Vast
+                    </button>
+                    <button class="fear-entity-btn" data-entity="end"
+                      onclick="selectFearEntity('end')" title="The End"
+                      style="background:rgba(0,0,0,0.3);border:1px solid #9E9E9E55;color:#9E9E9Eaa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.7em;white-space:nowrap;">
+                      ☠ End
+                    </button>
+                  </div>
+
+                  <!-- Message textarea -->
+                  <textarea
+                    id="fearMessageInput"
+                    rows="3"
+                    placeholder="Enter the fear message…"
+                    style="
+                      width: 100%;
+                      box-sizing: border-box;
+                      background: rgba(0,0,0,0.4);
+                      border: 1px solid #FF8F0055;
+                      color: #eee;
+                      border-radius: 4px;
+                      padding: 6px 8px;
+                      font-size: 0.85em;
+                      resize: vertical;
+                      margin-bottom: 8px;
+                      transition: border-color 0.3s, box-shadow 0.3s;
+                    "
+                  ></textarea>
+
+                  <!-- Target + Duration row -->
+                  <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 130px;">
+                      <label style="font-size: 0.75em; color: #888; display: block; margin-bottom: 2px;">Target</label>
+                      <select id="fearTarget"
+                        style="width:100%;background:rgba(0,0,0,0.4);border:1px solid #555;color:#ccc;border-radius:4px;padding:4px 6px;font-size:0.82em;">
+                        <option value="all" style="color:#ffb74d;">— All Players —</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style="font-size: 0.75em; color: #888; display: block; margin-bottom: 2px;">Duration</label>
+                      <div style="display: flex; gap: 3px;">
+                        <button class="fear-dur-btn" data-ms="500"
+                          onclick="setFearDuration(500)"
+                          style="background:rgba(0,0,0,0.3);border:1px solid #555;color:#888;border-radius:3px;padding:3px 6px;cursor:pointer;font-size:0.75em;">
+                          0.5s
+                        </button>
+                        <button class="fear-dur-btn" data-ms="1000"
+                          onclick="setFearDuration(1000)"
+                          style="background:rgba(0,0,0,0.3);border:1px solid #555;color:#888;border-radius:3px;padding:3px 6px;cursor:pointer;font-size:0.75em;">
+                          1s
+                        </button>
+                        <button class="fear-dur-btn" data-ms="2000"
+                          onclick="setFearDuration(2000)"
+                          style="background:rgba(0,0,0,0.3);border:1px solid #555;color:#888;border-radius:3px;padding:3px 6px;cursor:pointer;font-size:0.75em;">
+                          2s
+                        </button>
+                        <button class="fear-dur-btn" data-ms="3000"
+                          onclick="setFearDuration(3000)"
+                          style="background:rgba(120,80,180,0.35);border:1px solid #9C27B0;color:#CE93D8;font-weight:bold;border-radius:3px;padding:3px 6px;cursor:pointer;font-size:0.75em;">
+                          3s
+                        </button>
+                        <button class="fear-dur-btn" data-ms="4000"
+                          onclick="setFearDuration(4000)"
+                          style="background:rgba(0,0,0,0.3);border:1px solid #555;color:#888;border-radius:3px;padding:3px 6px;cursor:pointer;font-size:0.75em;">
+                          4s
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Send button -->
+                  <button
+                    id="fearSendBtn"
+                    onclick="sendFearMessage()"
+                    style="
+                      width: 100%;
+                      padding: 7px;
+                      background: rgba(80,0,100,0.4);
+                      border: 1px solid #7B1FA2;
+                      color: #CE93D8;
+                      border-radius: 4px;
+                      cursor: pointer;
+                      font-size: 0.85em;
+                      letter-spacing: 0.06em;
+                      transition: background 0.3s;
+                    "
+                    onmouseover="this.style.background='rgba(120,0,160,0.55)'"
+                    onmouseout="this.style.background='rgba(80,0,100,0.4)'"
+                  >
+                    👁 Send Fear
+                  </button>
+                </div>
+              </details>
+              <!-- ========== END VOICE OF THE FEARS ========== -->
+
               <div class="time-tracker-controls">
                 <button class="button" onclick="sendTestMessage()">
                   📢 Broadcast Test Message
@@ -4783,6 +4959,7 @@
     <script src="functions/multiplayer.js?v=4"></script>
     <script src="functions/gm-player-details.js?v=1"></script>
     <script src="functions/gm-multiplayer.js?v=6"></script>
+    <script src="functions/voice-of-fears.js"></script>
 
     <!-- ==================== INITIALIZATION (MUST BE LAST) ==================== -->
     <script src="functions/main.js"></script>

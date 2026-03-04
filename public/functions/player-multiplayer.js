@@ -355,6 +355,30 @@ function setupMultiplayerListeners() {
   }
 
   // Note: Stress/Damage/XP assignments are now handled by characterSync.js
+
+  // Voice of the Fears — listen for subliminal messages directed at this player
+  if (multiplayerManager.roomCode) {
+    firebase
+      .database()
+      .ref(
+        `rooms/${multiplayerManager.roomCode}/sharedData/fearMessages`
+      )
+      .on("child_added", (snapshot) => {
+        const data = snapshot.val();
+        if (!data || data.delivered) return;
+        // Ignore messages not directed at this player
+        if (
+          data.targetPlayerId !== "all" &&
+          data.targetPlayerId !== multiplayerManager.playerId
+        )
+          return;
+        // Ignore stale messages (older than 15 seconds) to prevent replay on reconnect
+        if (data.timestamp < Date.now() - 15000) return;
+        // Mark delivered to prevent duplicate displays
+        snapshot.ref.update({ delivered: true });
+        if (typeof showFearMessage === "function") showFearMessage(data);
+      });
+  }
 }
 
 // Track previous battle map visibility to only notify on changes

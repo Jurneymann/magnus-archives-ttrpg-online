@@ -345,6 +345,9 @@ function updateConnectedPlayersList(players) {
 
   // Update chat recipients dropdown
   updateChatRecipients(playerArray);
+  // Update Voice of the Fears target dropdown
+  if (typeof updateFearTargetDropdown === "function")
+    updateFearTargetDropdown(playerArray);
 }
 
 /**
