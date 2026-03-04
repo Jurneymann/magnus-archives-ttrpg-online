@@ -14,7 +14,12 @@ The chat system enables real-time communication between the GM and players durin
 - **Individual Messaging**: Send private messages to specific players
 - **Real-time Updates**: See all incoming player messages instantly
 - **Player List Dropdown**: Automatically populated with connected players
-- **Message Display**: Color-coded messages with timestamps and sender names
+- **Player Colour Coding**: Each player is assigned a unique colour from a 10-colour palette; all messages from that player render in their colour across the whole session
+- **Typing Indicators**: A live "X is typing" banner appears when one or more players are composing a message
+- **Read Receipts**: GM sent messages show ✓ Delivered or ✓✓ Read status
+- **Swear Word Highlighting**: Profanity is highlighted with an animated red-orange gradient
+- **Floating Chat Panel**: Chat opens as a standalone floating panel via the 💬 Chat button in the toolbar; independent of the multiplayer setup modal
+- **Message Deduplication**: Duplicate Firebase events are suppressed using `data-message-id` attributes
 - **Auto-scroll**: Newest messages automatically scroll into view
 
 ### Player Chat Features
@@ -46,6 +51,8 @@ rooms/
           timestamp: 1234567890
           fromGM: true/false
           read: true/false
+      typing/
+        {playerId}: true/false
 ```
 
 ### Backend Methods (multiplayer.js)
@@ -72,10 +79,27 @@ Listens for incoming chat messages filtered by recipient.
 
 #### `markChatAsRead(messageId)`
 
-Marks a message as read (currently placeholder for future notification system).
+Marks a message as read; updates the `read` flag in Firebase, triggering a read receipt update on the GM side.
 
 - **Parameters:**
   - `messageId` (string): Firebase message key
+
+#### `setTypingStatus(isTyping)`
+
+Broadcasts the current user's typing status to Firebase.
+
+- **Parameters:**
+  - `isTyping` (boolean): `true` when composing, `false` when done
+- **Writes to:** `/rooms/{roomCode}/sharedData/typing/{userId}`
+- **Auto-cleared** after 2 seconds of inactivity via `handleGMChatTyping()`
+
+#### `onTypingStatus(callback)`
+
+Listens for typing status changes from any participant.
+
+- **Parameters:**
+  - `callback` (function): Called with an array of names currently typing
+- **Note:** Filters out the current user's own typing status
 
 ---
 
@@ -83,41 +107,46 @@ Marks a message as read (currently placeholder for future notification system).
 
 ### UI Components (index.html)
 
-Located in the Multiplayer Panel modal:
+The chat system lives in a dedicated **floating panel** (`id="chatPanel"`), separate from the multiplayer setup modal. It is toggled open/closed via the 💬 Chat toolbar button (`id="chatButton"`):
 
 ```html
-<!-- Chat System Section -->
-<div
-  style="background: rgba(255, 152, 0, 0.1); border: 2px solid #ff9800; 
-     border-radius: 8px; padding: 20px; margin-bottom: 20px;"
->
-  <h3>💬 Chat System</h3>
+<!-- Chat Panel (floating, shown/hidden via toggleChatPanel()) -->
+<div id="chatPanel" style="display: none;">
+
+  <!-- Typing Indicator -->
+  <div id="gmTypingIndicator" style="display: none;">
+    <span></span>
+  </div>
 
   <!-- Message Display Container -->
-  <div
-    id="gmChatContainer"
-    style="height: 250px; overflow-y: auto; 
-       margin-bottom: 15px;"
-  >
-    No messages yet...
+  <div id="chatMessagesContainer"
+    style="height: 300px; overflow-y: auto; margin-bottom: 15px;">
+    <!-- messages rendered here -->
   </div>
 
   <!-- Recipient Dropdown -->
-  <select id="chatRecipient" style="width: 100%; margin-bottom: 10px;">
-    <option value="all">📢 All Players</option>
+  <select id="chatRecipient">
+    <option value="all">All Players</option>
   </select>
 
   <!-- Message Input -->
   <input
     type="text"
-    id="gmChatInput"
+    id="chatMessageInput"
     placeholder="Type your message..."
+    oninput="handleGMChatTyping()"
     onkeypress="if(event.key==='Enter') sendChatMessage()"
   />
 
   <!-- Send Button -->
-  <button onclick="sendChatMessage()">Send Message</button>
+  <button onclick="sendChatMessage()">Send</button>
 </div>
+
+<!-- Chat toolbar button (shown after room creation) -->
+<button id="chatButton" onclick="toggleChatPanel()" style="display: none;">
+  💬 Chat
+  <span id="chatNotificationBadge" style="display: none;">!</span>
+</button>
 ```
 
 ### JavaScript Functions (gm-multiplayer.js)
@@ -128,126 +157,213 @@ Populates the recipient dropdown with connected players.
 
 ```javascript
 function updateChatRecipients(players) {
-  const dropdown = document.getElementById("chatRecipient");
-  if (!dropdown) return;
+  const select = document.getElementById("chatRecipient");
+  if (!select) return;
 
-  // Clear existing options except "All Players"
-  dropdown.innerHTML = '<option value="all">📢 All Players</option>';
+  const allOption = '<option value="all">All Players</option>';
+  const playerList = players || [];
 
-  // Add individual player options
-  players.forEach((player) => {
-    const option = document.createElement("option");
-    option.value = player.id;
-    option.textContent = `👤 ${player.name}`;
-    dropdown.appendChild(option);
-  });
+  const playerOptions = playerList
+    .map((p) => `<option value="${p.id}">${p.name}</option>`)
+    .join("");
+
+  select.innerHTML = allOption + playerOptions;
 }
 ```
 
 #### `sendChatMessage()`
 
-Sends message from GM to selected recipient.
+Sends message from GM to selected recipient. The display is handled automatically via the Firebase `onChatMessage` listener — there is no local display call needed.
 
 ```javascript
 function sendChatMessage() {
-  const input = document.getElementById("gmChatInput");
+  const input = document.getElementById("chatMessageInput");
   const recipientSelect = document.getElementById("chatRecipient");
+
+  if (!input || !recipientSelect) return;
+
   const message = input.value.trim();
   const recipient = recipientSelect.value;
 
-  if (!message) return;
+  if (!message) {
+    alert("Please enter a message");
+    return;
+  }
 
-  multiplayerManager
-    .sendChatMessage(recipient, message)
-    .then(() => {
-      displayChatMessage({
-        from: "GM",
-        fromName: "GM",
-        to: recipient,
-        toName:
-          recipient === "all"
-            ? "All Players"
-            : recipientSelect.selectedOptions[0].text,
-        message: message,
-        timestamp: Date.now(),
-        fromGM: true,
-      });
-      input.value = "";
-    })
-    .catch((error) => {
-      console.error("Error sending message:", error);
-      alert("Failed to send message");
-    });
+  multiplayerManager.sendChatMessage(recipient, message);
+  input.value = "";
+}
+```
+
+#### `handleGMChatTyping()`
+
+Fires on every keystroke in the GM chat input. Sets typing status to `true` and auto-clears it after 2 seconds of inactivity.
+
+```javascript
+let gmTypingTimeout;
+function handleGMChatTyping() {
+  if (!multiplayerManager) return;
+  multiplayerManager.setTypingStatus(true);
+  clearTimeout(gmTypingTimeout);
+  gmTypingTimeout = setTimeout(() => {
+    multiplayerManager.setTypingStatus(false);
+  }, 2000);
+}
+```
+
+#### `toggleChatPanel()`
+
+Shows/hides the floating chat panel and clears the notification badge on open.
+
+```javascript
+function toggleChatPanel() {
+  const panel = document.getElementById("chatPanel");
+  const badge = document.getElementById("chatNotificationBadge");
+  if (!panel) return;
+  if (panel.style.display === "none" || panel.style.display === "") {
+    panel.style.display = "flex";
+    if (badge) badge.style.display = "none";
+  } else {
+    panel.style.display = "none";
+  }
 }
 ```
 
 #### `displayChatMessage(msg)`
 
-Renders a chat message in the GM's chat container.
+Renders a chat message in the GM's chat panel (`chatMessagesContainer`). Features player-specific colours, read receipts, and swear word highlighting.
+
+Key behaviours:
+
+- **Deduplication**: Checks `data-message-id` on existing elements to skip duplicates
+- **Player colour**: Looks up `getPlayerColor(msg.from)` for received messages
+- **Read receipts**: Sent (GM) messages include a `✓ Delivered` / `✓✓ Read` status footer
+- **Swear highlighting**: Message text is passed through `highlightSwearWords()` before rendering
+- **Notification badge**: Shows `chatNotificationBadge` if the chat panel is closed when a player message arrives
 
 ```javascript
 function displayChatMessage(msg) {
-  const container = document.getElementById("gmChatContainer");
+  const container = document.getElementById("chatMessagesContainer");
   if (!container) return;
 
-  // Clear placeholder
-  if (container.textContent.includes("No messages yet")) {
-    container.innerHTML = "";
-  }
+  // Deduplication
+  if (msg.id && container.querySelector(`[data-message-id="${msg.id}"]`)) return;
 
-  const messageDiv = document.createElement("div");
-  const timestamp = new Date(msg.timestamp).toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const isSent = msg.from === "gm" || msg.fromName === "GM";
+  const messageColor = isSent ? "#4caf50" : getPlayerColor(msg.from);
 
-  // Color code: sent = green, received = blue
-  const isSent = msg.from === "GM";
-  const bgColor = isSent ? "rgba(76, 175, 80, 0.2)" : "rgba(33, 150, 243, 0.2)";
-  const borderColor = isSent ? "#4caf50" : "#2196f3";
-
-  messageDiv.style.cssText = `
-    background: ${bgColor};
-    border-left: 4px solid ${borderColor};
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 4px;
+  const msgDiv = document.createElement("div");
+  msgDiv.setAttribute("data-message-id", msg.id || Date.now());
+  msgDiv.style.cssText = `
+    margin-bottom: 10px; padding: 10px; border-radius: 6px;
+    background: ${isSent ? "rgba(76,175,80,0.1)" : messageColor + "1a"};
+    border-left: 3px solid ${messageColor};
   `;
 
-  messageDiv.innerHTML = `
-    <div style="display: flex; justify-content: space-between;">
-      <strong style="color: ${borderColor};">${msg.fromName} → ${
-    msg.toName
-  }</strong>
-      <span style="color: #888; font-size: 0.85em;">${timestamp}</span>
+  const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const recipientText = msg.to === "all" ? "to All Players" : msg.toName ? `to ${msg.toName}` : "";
+
+  msgDiv.innerHTML = `
+    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+      <div style="font-weight:bold; color:${messageColor}; font-size:0.9em;">
+        ${isSent ? "👑 " : ""}${msg.fromName} ${recipientText}
+      </div>
+      <div style="font-size:0.75em; color:#888;">${time}</div>
     </div>
-    <div style="color: #e0e0e0; margin-top: 5px;">${escapeHtml(
-      msg.message
-    )}</div>
+    <div style="color:#e0e0e0; font-size:0.9em; line-height:1.4;">
+      ${highlightSwearWords(msg.message)}
+    </div>
+    ${isSent ? `<div style="text-align:right; margin-top:4px;">
+      ${msg.read ? "✓✓ Read" : "✓ Delivered"}
+    </div>` : ""}
   `;
 
-  container.appendChild(messageDiv);
-  container.scrollTop = container.scrollHeight; // Auto-scroll
+  container.appendChild(msgDiv);
+  container.scrollTop = container.scrollHeight;
 }
 ```
 
 ### Integration
 
-Chat listener is set up when room is created:
+In `createMultiplayerRoom()`:
 
 ```javascript
-// In createMultiplayerRoom()
+// Chat
 multiplayerManager.onChatMessage((message) => {
   displayChatMessage(message);
 });
+
+// Typing indicator
+multiplayerManager.onTypingStatus((typingUsers) => {
+  const indicator = document.getElementById("gmTypingIndicator");
+  const span = indicator?.querySelector("span");
+  if (indicator && span) {
+    if (typingUsers.length > 0) {
+      span.textContent =
+        typingUsers.length === 1
+          ? `${typingUsers[0]} is typing`
+          : `${typingUsers.length} players are typing`;
+      indicator.style.display = "block";
+    } else {
+      indicator.style.display = "none";
+    }
+  }
+});
 ```
 
-Chat recipients are updated when players connect/disconnect:
+Recipients are refreshed when players connect/disconnect:
 
 ```javascript
 // In updateConnectedPlayersList()
+assignPlayerColor(player.id); // Ensure colour assigned before rendering
 updateChatRecipients(playerArray);
 ```
+
+---
+
+## Player Colour System
+
+Each player is assigned a unique colour on first connection:
+
+```javascript
+const playerColors = [
+  "#2196f3", // Blue
+  "#9c27b0", // Purple
+  "#f44336", // Red
+  "#ff9800", // Orange
+  "#00bcd4", // Cyan
+  "#ffeb3b", // Yellow
+  "#e91e63", // Pink
+  "#3f51b5", // Indigo
+  "#009688", // Teal
+  "#ff5722", // Deep Orange
+];
+```
+
+`assignPlayerColor(playerId)` maps each player ID to the next available colour. `getPlayerColor(playerId)` retrieves it (defaults to blue if not yet assigned). Colours cycle if there are more than 10 players.
+
+---
+
+## Typing Indicators
+
+Both GM and players can broadcast typing status.
+
+- When the GM types in `chatMessageInput`, `handleGMChatTyping()` fires `setTypingStatus(true)` and schedules `setTypingStatus(false)` after 2 seconds
+- Player view: typing status fires on `oninput` of `playerChatInput`
+- The GM sees the `gmTypingIndicator` banner update in real time via `onTypingStatus()`
+- Players do **not** currently display a typing indicator for the GM
+
+---
+
+## Swear Word Highlighting
+
+Both GM and player implementations include a `highlightSwearWords(text)` function. It:
+
+1. Escapes the raw text to prevent XSS
+2. Builds a whole-word regex from a list of ~100 profanity terms (common English, British/Australian slang, body parts, insults, and mild variants)
+3. Replaces each match with a `<span>` styled with an animated red-orange gradient and `swearPulse` CSS animation
+
+This runs on **all** rendered messages — both sent and received — in both GM and player views.
 
 ---
 
@@ -293,7 +409,7 @@ updateChatRecipients(playerArray);
 
 #### `sendPlayerChatMessage()`
 
-Sends message from player to GM.
+Sends message from player to GM. Display is handled automatically by the Firebase `onChatMessage` listener.
 
 ```javascript
 function sendPlayerChatMessage() {
@@ -310,19 +426,6 @@ function sendPlayerChatMessage() {
   multiplayerManager
     .sendChatMessage("GM", message)
     .then(() => {
-      displayPlayerChatMessage(
-        {
-          from: multiplayerManager.playerName || "You",
-          fromName: multiplayerManager.playerName || "You",
-          to: "GM",
-          toName: "GM",
-          message: message,
-          timestamp: Date.now(),
-          fromGM: false,
-        },
-        true
-      ); // true = sent by us
-
       input.value = "";
       input.focus();
     })
@@ -333,64 +436,45 @@ function sendPlayerChatMessage() {
 }
 ```
 
+> **Note:** The `onChatMessage` listener in the player also filters `[AVATAR_UNLOCK:]`-prefixed messages — these are system messages used to unlock the Avatar tab and are only shown to the intended player after the prefix is stripped.
+
 #### `displayPlayerChatMessage(msg, sentByUs)`
 
-Renders a chat message in the player's chat container.
+Renders a chat message in the player's chat container. Also uses `highlightSwearWords()` on the message text.
+
+The `isSentByUs` check compares `msg.from` against `multiplayerManager.playerId` and `multiplayerManager.playerName`, which handles cases where the Firebase echo arrives before the local display.
 
 ```javascript
 function displayPlayerChatMessage(msg, sentByUs = false) {
   const container = document.getElementById("playerChatContainer");
   if (!container) return;
 
-  // Clear placeholder
-  if (container.querySelector('div[style*="No messages"]')) {
-    container.innerHTML = "";
+  const isSentByUs =
+    sentByUs ||
+    msg.from === multiplayerManager.playerId ||
+    msg.from === multiplayerManager.playerName ||
+    (msg.fromName === multiplayerManager.playerName && !msg.fromGM);
+
+  let backgroundColor, borderColor, senderLabel;
+  if (isSentByUs) {
+    backgroundColor = "rgba(76, 175, 80, 0.2)";
+    borderColor = "#4caf50";
+    senderLabel = `You → ${msg.toName || "GM"}`;
+  } else {
+    backgroundColor = "rgba(33, 150, 243, 0.2)";
+    borderColor = "#2196f3";
+    senderLabel = "GM";
   }
 
   const messageDiv = document.createElement("div");
-  const timestamp = new Date(msg.timestamp).toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  // Color code based on sender
-  let backgroundColor, borderColor, senderLabel;
-  if (sentByUs) {
-    backgroundColor = "rgba(76, 175, 80, 0.2)"; // Green
-    borderColor = "#4caf50";
-    senderLabel = `You → ${msg.toName}`;
-  } else {
-    backgroundColor = "rgba(33, 150, 243, 0.2)"; // Blue
-    borderColor = "#2196f3";
-    senderLabel = `GM`;
-  }
-
-  messageDiv.style.cssText = `
-    background: ${backgroundColor};
-    border-left: 4px solid ${borderColor};
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-  `;
-
-  messageDiv.innerHTML = `
-    <div style="display: flex; justify-content: space-between;">
-      <strong style="color: ${borderColor};">${senderLabel}</strong>
-      <span style="color: #888; font-size: 0.85em;">${timestamp}</span>
-    </div>
-    <div style="color: #e0e0e0; line-height: 1.5;">${escapeHtml(
-      msg.message
-    )}</div>
-  `;
+  // ... styling and innerHTML using highlightSwearWords(msg.message) ...
 
   container.appendChild(messageDiv);
   container.scrollTop = container.scrollHeight;
 
-  // Mark as read
-  if (!sentByUs && msg.id) {
-    setTimeout(() => {
-      multiplayerManager?.markChatAsRead(msg.id);
-    }, 1000);
+  // Mark as read after 1 second
+  if (!isSentByUs && msg.id) {
+    setTimeout(() => { multiplayerManager?.markChatAsRead(msg.id); }, 1000);
   }
 }
 ```
@@ -602,8 +686,8 @@ Messages are readable by GM and intended recipients only:
 - [ ] Image/file sharing
 - [ ] Chat history export
 - [ ] Message search/filter
-- [ ] Typing indicators
-- [ ] Read receipts
+- [x] Typing indicators *(implemented v2.0)*
+- [x] Read receipts *(implemented v2.0)*
 - [ ] @mentions with notifications
 - [ ] Message threading/replies
 
@@ -646,14 +730,25 @@ Messages are readable by GM and intended recipients only:
 
 ## Version History
 
-### v1.0.0 (Current)
+### v2.0.0 (Current)
+
+- Player colour coding (10-colour palette, per-session assignment)
+- Typing indicators (live "X is typing" banner for GM)
+- Read receipts on GM sent messages (✓ Delivered / ✓✓ Read)
+- Swear word highlighting (animated gradient, ~100 terms)
+- Dedicated floating chat panel (independent of multiplayer modal)
+- Message deduplication via `data-message-id`
+- GM typing status auto-cleared after 2s inactivity
+- Avatar unlock message filtering in player view
+
+### v1.0.0
 
 - Initial chat system implementation
 - GM broadcast and individual messaging
 - Player-to-GM messaging
 - Real-time Firebase sync
 - Notification badges
-- Color-coded messages
+- Colour-coded messages (green sent / blue received)
 - Auto-scroll
 - Enter key support
 
