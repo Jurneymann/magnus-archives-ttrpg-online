@@ -288,6 +288,41 @@ async function sendFearMessage() {
   }
 }
 
+// ==================== TAB SWITCHER (GM) ==================== //
+
+function switchChatTab(tab) {
+  const chatContent = document.getElementById("chatTabContent");
+  const fearsContent = document.getElementById("fearsTabContent");
+  const chatBtn = document.getElementById("chatTabBtn");
+  const fearsBtn = document.getElementById("fearsTabBtn");
+  if (!chatContent || !fearsContent) return;
+
+  const isChat = tab === "chat";
+
+  chatContent.style.display = isChat ? "" : "none";
+  fearsContent.style.display = isChat ? "none" : "";
+
+  // Chat tab active styling
+  if (chatBtn) {
+    chatBtn.style.borderBottom = isChat ? "2px solid #ff9800" : "2px solid transparent";
+    chatBtn.style.background = isChat ? "rgba(255,152,0,0.1)" : "transparent";
+    chatBtn.style.color = isChat ? "#ffb74d" : "#888";
+    chatBtn.style.fontWeight = isChat ? "bold" : "normal";
+  }
+  // Fears tab active styling
+  if (fearsBtn) {
+    fearsBtn.style.borderBottom = isChat ? "2px solid transparent" : "2px solid #9C27B0";
+    fearsBtn.style.background = isChat ? "transparent" : "rgba(120,0,160,0.12)";
+    fearsBtn.style.color = isChat ? "#888" : "#CE93D8";
+    fearsBtn.style.fontWeight = isChat ? "normal" : "bold";
+  }
+
+  // Initialise entity highlight on first switch to fears tab
+  if (!isChat) {
+    selectFearEntity(fearSelectedEntity);
+  }
+}
+
 // ==================== PLAYER SIDE ==================== //
 
 let fearStylesInjected = false;
