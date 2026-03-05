@@ -1,8 +1,10 @@
 # 💬 Chat System - Implementation Guide
 
+> **Version:** v3.0.0 — Includes Voice of the Fears subliminal overlay system
+
 ## Overview
 
-The chat system enables real-time communication between the GM and players during multiplayer sessions. Messages are synced via Firebase Realtime Database and support both broadcast (to all players) and individual messaging.
+The chat system enables real-time communication between the GM and players during multiplayer sessions. Messages are synced via Firebase Realtime Database and support both broadcast (to all players) and individual messaging. The GM chat panel also hosts the **Voice of the Fears** tool — a separate tab for sending entity-themed subliminal overlay messages to player screens.
 
 ---
 
@@ -21,6 +23,7 @@ The chat system enables real-time communication between the GM and players durin
 - **Floating Chat Panel**: Chat opens as a standalone floating panel via the 💬 Chat button in the toolbar; independent of the multiplayer setup modal
 - **Message Deduplication**: Duplicate Firebase events are suppressed using `data-message-id` attributes
 - **Auto-scroll**: Newest messages automatically scroll into view
+- **Voice of the Fears**: A dedicated second tab in the chat panel lets the GM send entity-themed subliminal overlay messages to individual players or all players simultaneously (see [Voice of the Fears](#voice-of-the-fears))
 
 ### Player Chat Features
 
@@ -53,6 +56,14 @@ rooms/
           read: true/false
       typing/
         {playerId}: true/false
+      fearMessages/
+        {pushKey}/
+          targetPlayerId: "player123" or "all"
+          entity:         "buried" | "corruption" | "dark" | "desolation" | "end" | "eye" | "flesh" | "hunt" | "lonely" | "slaughter" | "spiral" | "stranger" | "vast" | "web"
+          message:        "Spoken text of the fear"
+          duration:       500 | 1000 | 2000 | 3000 | 4000   ← milliseconds
+          timestamp:      1234567890
+          delivered:      false → true  (set by player client on receipt)
 ```
 
 ### Backend Methods (multiplayer.js)
@@ -112,15 +123,16 @@ The chat system lives in a dedicated **floating panel** (`id="chatPanel"`), sepa
 ```html
 <!-- Chat Panel (floating, shown/hidden via toggleChatPanel()) -->
 <div id="chatPanel" style="display: none;">
-
   <!-- Typing Indicator -->
   <div id="gmTypingIndicator" style="display: none;">
     <span></span>
   </div>
 
   <!-- Message Display Container -->
-  <div id="chatMessagesContainer"
-    style="height: 300px; overflow-y: auto; margin-bottom: 15px;">
+  <div
+    id="chatMessagesContainer"
+    style="height: 300px; overflow-y: auto; margin-bottom: 15px;"
+  >
     <!-- messages rendered here -->
   </div>
 
@@ -247,7 +259,8 @@ function displayChatMessage(msg) {
   if (!container) return;
 
   // Deduplication
-  if (msg.id && container.querySelector(`[data-message-id="${msg.id}"]`)) return;
+  if (msg.id && container.querySelector(`[data-message-id="${msg.id}"]`))
+    return;
 
   const isSent = msg.from === "gm" || msg.fromName === "GM";
   const messageColor = isSent ? "#4caf50" : getPlayerColor(msg.from);
@@ -260,8 +273,12 @@ function displayChatMessage(msg) {
     border-left: 3px solid ${messageColor};
   `;
 
-  const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  const recipientText = msg.to === "all" ? "to All Players" : msg.toName ? `to ${msg.toName}` : "";
+  const time = new Date(msg.timestamp).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const recipientText =
+    msg.to === "all" ? "to All Players" : msg.toName ? `to ${msg.toName}` : "";
 
   msgDiv.innerHTML = `
     <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
@@ -273,9 +290,13 @@ function displayChatMessage(msg) {
     <div style="color:#e0e0e0; font-size:0.9em; line-height:1.4;">
       ${highlightSwearWords(msg.message)}
     </div>
-    ${isSent ? `<div style="text-align:right; margin-top:4px;">
+    ${
+      isSent
+        ? `<div style="text-align:right; margin-top:4px;">
       ${msg.read ? "✓✓ Read" : "✓ Delivered"}
-    </div>` : ""}
+    </div>`
+        : ""
+    }
   `;
 
   container.appendChild(msgDiv);
@@ -341,6 +362,142 @@ const playerColors = [
 ```
 
 `assignPlayerColor(playerId)` maps each player ID to the next available colour. `getPlayerColor(playerId)` retrieves it (defaults to blue if not yet assigned). Colours cycle if there are more than 10 players.
+
+---
+
+## Voice of the Fears
+
+The Voice of the Fears is a GM-only tool surfaced as a second tab inside the chat panel. It allows the GM to send a short message to one or all players; the message renders as a styled full-screen overlay on the recipient's screen in the visual language of one of the 14 Magnus Archives Entities. No entity name, icon, or attribution is shown to the player — only the text itself, styled subliminally.
+
+### Accessing the tool
+
+The chat panel (`id="chatPanel"`) uses a two-tab header:
+
+| Tab button | ID | Default state |
+|---|---|---|
+| 💬 Chat | `chatTabBtn` | Active (orange) |
+| 👁 Voice of the Fears | `fearsTabBtn` | Inactive |
+
+Clicking either tab calls `switchChatTab('chat')` or `switchChatTab('fears')` (defined in `voice-of-fears.js`).
+
+### Entity Themes
+
+The 14 entities are listed alphabetically in the selector grid. Each maps to a full visual theme defined in the `fearEntities` config object in `voice-of-fears.js`:
+
+| Key | Name | Primary colour | Effect |
+|---|---|---|---|
+| `buried` | The Buried | `#A1887F` | Slides down from top like a ceiling drop |
+| `corruption` | The Corruption | `#8BC34A` | Oozes in with blur+saturation |
+| `dark` | The Dark | `#607D8B` | Near-invisible, extremely slow reveal |
+| `desolation` | The Desolation | `#FF5722` | Scorches in; glow builds |
+| `end` | The End | `#9E9E9E` | Already present; very slow settle, light weight |
+| `eye` | The Eye | `#FF8F00` | Small-caps, letter-spacing reveal |
+| `flesh` | The Flesh | `#F06292` | Heartbeat pulse animation |
+| `hunt` | The Hunt | `#4CAF50` | Slides in from left with letterbox bars |
+| `lonely` | The Lonely | `#546E7A` | Very slow fade, wide letter-spacing |
+| `slaughter` | The Slaughter | `#F44336` | Instant hard cut (0.12s), weight 900 |
+| `spiral` | The Spiral | `#E91E63` | Rotation warp; background slowly hue-shifts |
+| `stranger` | The Stranger | `#B0BEC5` | Courier New; letter-spacing shrinks to normal |
+| `vast` | The Vast | `#5C6BC0` | Scales up from near-zero (zoom-out) |
+| `web` | The Web | `#9C27B0` | Drifts down from above |
+
+### GM Functions (`voice-of-fears.js`)
+
+#### `selectFearEntity(entityKey)`
+
+Updates the active entity selection. Highlights the corresponding button (coloured border + glow) and tints the message textarea border to the entity's colour.
+
+```javascript
+selectFearEntity('eye'); // selects The Eye theme
+```
+
+#### `setFearDuration(ms)`
+
+Sets `fearDuration` (default `3000`). Available values: `500`, `1000`, `2000`, `3000`, `4000`. Updates duration button highlight states.
+
+#### `updateFearTargetDropdown(players)`
+
+Populates `#fearTarget` with individual player entries followed by a "— All Players —" option at the bottom. Called automatically from `updateConnectedPlayersList()` in `gm-multiplayer.js` alongside `updateChatRecipients()`.
+
+```javascript
+// In gm-multiplayer.js — updateConnectedPlayersList()
+updateChatRecipients(playerArray);
+if (typeof updateFearTargetDropdown === 'function')
+  updateFearTargetDropdown(playerArray);
+```
+
+#### `sendFearMessage()`
+
+Pushes the composed fear message to Firebase and logs it in the GM chat panel.
+
+```javascript
+// Writes to:
+// rooms/{roomCode}/sharedData/fearMessages/{pushKey}
+
+// Also calls displayChatMessage() with isFearMessage: true for the GM log:
+// "👁 [Voice of the Fears — The Eye]: "You are watched.""
+```
+
+Validations: requires non-empty message, selected entity, and active multiplayer session.
+
+#### `switchChatTab(tab)`
+
+Toggles between the Chat and Voice of the Fears tabs. Updates button border/colour/weight states and calls `selectFearEntity(fearSelectedEntity)` on first switch to the Fears tab to ensure the active entity is highlighted.
+
+```javascript
+switchChatTab('chat');  // show chat, hide fears
+switchChatTab('fears'); // show fears, hide chat
+```
+
+### Player Functions (`voice-of-fears.js`)
+
+#### `injectFearStyles()`
+
+Dynamically injects a `<style id="fearOverlayStyles">` element into `document.head` containing all 14 entity CSS themes and keyframe animations. Skipped if already injected (`fearStylesInjected` flag). Includes a `@media (prefers-reduced-motion: reduce)` fallback that collapses all animations to `0.01ms`.
+
+#### `showFearMessage(data)`
+
+Called by the Firebase listener in `player-multiplayer.js` when a fear message arrives for this player.
+
+1. Calls `injectFearStyles()` (no-op if already done)
+2. Removes any existing `#fearOverlay`
+3. Creates a fixed `div#fearOverlay` with the entity's `background` and CSS class
+4. For `hunt` entity: also appends two letterbox bars (`div.fear-hunt-bar`) top and bottom
+5. Fades in via double `requestAnimationFrame` opacity transition
+6. After `data.duration` ms: adds `.fear-fading` class (0.7s fade-out animation), then removes the overlay from the DOM
+
+XSS safety: message text is set via `element.textContent` before reading `.innerHTML`, never via direct string interpolation.
+
+### Firebase Listener (`player-multiplayer.js`)
+
+Added at the end of `setupMultiplayerListeners()`:
+
+```javascript
+// Voice of the Fears — listen for subliminal messages directed at this player
+firebase.database()
+  .ref(`rooms/${multiplayerManager.roomCode}/sharedData/fearMessages`)
+  .on('child_added', (snapshot) => {
+    const data = snapshot.val();
+    if (!data || data.delivered) return;
+    // Ignore messages not directed at this player
+    if (data.targetPlayerId !== 'all' &&
+        data.targetPlayerId !== multiplayerManager.playerId) return;
+    // Ignore stale messages (>15s old) to prevent replay on reconnect
+    if (data.timestamp < Date.now() - 15000) return;
+    snapshot.ref.update({ delivered: true });
+    if (typeof showFearMessage === 'function') showFearMessage(data);
+  });
+```
+
+The `delivered` flag prevents a second listener event from showing the overlay twice. The 15-second staleness guard prevents replaying old messages when a player reconnects to an existing session.
+
+### State Variables
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `fearSelectedEntity` | `"eye"` | Currently selected entity key |
+| `fearDuration` | `3000` | Display duration in milliseconds |
+| `fearStylesInjected` | `false` | Guards against injecting CSS twice |
 
 ---
 
@@ -474,7 +631,9 @@ function displayPlayerChatMessage(msg, sentByUs = false) {
 
   // Mark as read after 1 second
   if (!isSentByUs && msg.id) {
-    setTimeout(() => { multiplayerManager?.markChatAsRead(msg.id); }, 1000);
+    setTimeout(() => {
+      multiplayerManager?.markChatAsRead(msg.id);
+    }, 1000);
   }
 }
 ```
@@ -626,6 +785,42 @@ if (targetTab === "chat" && typeof updateChatBadge === "function") {
 4. Send a new message
 5. **Expected:** Container scrolls back to bottom
 
+#### Test 8: Voice of the Fears — Tab Navigation
+
+1. Open the Chat panel via the 💬 Chat toolbar button
+2. **Expected:** Chat tab is active (orange underline), Fears tab is inactive
+3. Click the "👁 Voice of the Fears" tab
+4. **Expected:** Fears tab becomes active (purple underline); chat content hidden; entity grid, textarea, target/duration controls and Send Fear button visible
+5. Click "💬 Chat" tab
+6. **Expected:** Chat tab reactivates; fears content hidden
+
+#### Test 9: Voice of the Fears — Send to Individual Player
+
+1. Switch to the Fears tab
+2. Click an entity button (e.g. "Eye") — button should highlight with coloured border/glow; textarea border tints to match
+3. Set duration to 2s
+4. Type a short message in the textarea
+5. Select a specific player in the Target dropdown
+6. Click **👁 Send Fear**
+7. **Expected (GM):** Button briefly shows "✓ Sent"; a log entry appears in the Chat tab: `👁 [Voice of the Fears — The Eye]: "your message"`
+8. **Expected (Player):** Full-screen eye-themed overlay appears and fades out after ~2 seconds; no entity name visible
+9. Repeat for a different entity — confirm the visual style changes
+
+#### Test 10: Voice of the Fears — Broadcast to All Players
+
+1. Switch to the Fears tab
+2. Select an entity and type a message
+3. Select **— All Players —** in the Target dropdown
+4. Click **👁 Send Fear**
+5. **Expected:** Overlay appears simultaneously on all connected player screens
+6. **Expected:** Each overlay auto-removes after the set duration
+
+#### Test 11: Voice of the Fears — Stale Message Guard
+
+1. Send a fear message while a player is disconnected
+2. Player reconnects more than 15 seconds after the message was sent
+3. **Expected:** Player does **not** see the overlay on reconnect (stale guard prevents replay)
+
 ---
 
 ## Color Scheme
@@ -686,8 +881,8 @@ Messages are readable by GM and intended recipients only:
 - [ ] Image/file sharing
 - [ ] Chat history export
 - [ ] Message search/filter
-- [x] Typing indicators *(implemented v2.0)*
-- [x] Read receipts *(implemented v2.0)*
+- [x] Typing indicators _(implemented v2.0)_
+- [x] Read receipts _(implemented v2.0)_
 - [ ] @mentions with notifications
 - [ ] Message threading/replies
 
@@ -730,7 +925,19 @@ Messages are readable by GM and intended recipients only:
 
 ## Version History
 
-### v2.0.0 (Current)
+### v3.0.0 (Current)
+
+- **Voice of the Fears** GM tool (new module: `voice-of-fears.js`)
+  - Two-tab chat panel (💬 Chat / 👁 Voice of the Fears) replacing the `<details>` collapsible
+  - 14 entity themes (Buried, Corruption, Dark, Desolation, End, Eye, Flesh, Hunt, Lonely, Slaughter, Spiral, Stranger, Vast, Web) with full CSS keyframe animations
+  - Selectable duration: 0.5s / 1s / 2s / 3s / 4s
+  - Per-player or broadcast targeting; "— All Players —" option
+  - GM log entry on send (entity name visible to GM only)
+  - Stale message guard (15s) and `delivered` flag prevent replay
+  - Reduced-motion CSS media query fallback
+  - XSS-safe rendering via `textContent` extraction
+
+### v2.0.0
 
 - Player colour coding (10-colour palette, per-session assignment)
 - Typing indicators (live "X is typing" banner for GM)
