@@ -373,10 +373,10 @@ The Voice of the Fears is a GM-only tool surfaced as a second tab inside the cha
 
 The chat panel (`id="chatPanel"`) uses a two-tab header:
 
-| Tab button | ID | Default state |
-|---|---|---|
-| 💬 Chat | `chatTabBtn` | Active (orange) |
-| 👁 Voice of the Fears | `fearsTabBtn` | Inactive |
+| Tab button            | ID            | Default state   |
+| --------------------- | ------------- | --------------- |
+| 💬 Chat               | `chatTabBtn`  | Active (orange) |
+| 👁 Voice of the Fears | `fearsTabBtn` | Inactive        |
 
 Clicking either tab calls `switchChatTab('chat')` or `switchChatTab('fears')` (defined in `voice-of-fears.js`).
 
@@ -384,22 +384,22 @@ Clicking either tab calls `switchChatTab('chat')` or `switchChatTab('fears')` (d
 
 The 14 entities are listed alphabetically in the selector grid. Each maps to a full visual theme defined in the `fearEntities` config object in `voice-of-fears.js`:
 
-| Key | Name | Primary colour | Effect |
-|---|---|---|---|
-| `buried` | The Buried | `#A1887F` | Slides down from top like a ceiling drop |
-| `corruption` | The Corruption | `#8BC34A` | Oozes in with blur+saturation |
-| `dark` | The Dark | `#607D8B` | Near-invisible, extremely slow reveal |
-| `desolation` | The Desolation | `#FF5722` | Scorches in; glow builds |
-| `end` | The End | `#9E9E9E` | Already present; very slow settle, light weight |
-| `eye` | The Eye | `#FF8F00` | Small-caps, letter-spacing reveal |
-| `flesh` | The Flesh | `#F06292` | Heartbeat pulse animation |
-| `hunt` | The Hunt | `#4CAF50` | Slides in from left with letterbox bars |
-| `lonely` | The Lonely | `#546E7A` | Very slow fade, wide letter-spacing |
-| `slaughter` | The Slaughter | `#F44336` | Instant hard cut (0.12s), weight 900 |
-| `spiral` | The Spiral | `#E91E63` | Rotation warp; background slowly hue-shifts |
-| `stranger` | The Stranger | `#B0BEC5` | Courier New; letter-spacing shrinks to normal |
-| `vast` | The Vast | `#5C6BC0` | Scales up from near-zero (zoom-out) |
-| `web` | The Web | `#9C27B0` | Drifts down from above |
+| Key          | Name           | Primary colour | Effect                                          |
+| ------------ | -------------- | -------------- | ----------------------------------------------- |
+| `buried`     | The Buried     | `#A1887F`      | Slides down from top like a ceiling drop        |
+| `corruption` | The Corruption | `#8BC34A`      | Oozes in with blur+saturation                   |
+| `dark`       | The Dark       | `#607D8B`      | Near-invisible, extremely slow reveal           |
+| `desolation` | The Desolation | `#FF5722`      | Scorches in; glow builds                        |
+| `end`        | The End        | `#9E9E9E`      | Already present; very slow settle, light weight |
+| `eye`        | The Eye        | `#FF8F00`      | Small-caps, letter-spacing reveal               |
+| `flesh`      | The Flesh      | `#F06292`      | Heartbeat pulse animation                       |
+| `hunt`       | The Hunt       | `#4CAF50`      | Slides in from left with letterbox bars         |
+| `lonely`     | The Lonely     | `#546E7A`      | Very slow fade, wide letter-spacing             |
+| `slaughter`  | The Slaughter  | `#F44336`      | Instant hard cut (0.12s), weight 900            |
+| `spiral`     | The Spiral     | `#E91E63`      | Rotation warp; background slowly hue-shifts     |
+| `stranger`   | The Stranger   | `#B0BEC5`      | Courier New; letter-spacing shrinks to normal   |
+| `vast`       | The Vast       | `#5C6BC0`      | Scales up from near-zero (zoom-out)             |
+| `web`        | The Web        | `#9C27B0`      | Drifts down from above                          |
 
 ### GM Functions (`voice-of-fears.js`)
 
@@ -408,7 +408,7 @@ The 14 entities are listed alphabetically in the selector grid. Each maps to a f
 Updates the active entity selection. Highlights the corresponding button (coloured border + glow) and tints the message textarea border to the entity's colour.
 
 ```javascript
-selectFearEntity('eye'); // selects The Eye theme
+selectFearEntity("eye"); // selects The Eye theme
 ```
 
 #### `setFearDuration(ms)`
@@ -422,7 +422,7 @@ Populates `#fearTarget` with individual player entries followed by a "— All Pl
 ```javascript
 // In gm-multiplayer.js — updateConnectedPlayersList()
 updateChatRecipients(playerArray);
-if (typeof updateFearTargetDropdown === 'function')
+if (typeof updateFearTargetDropdown === "function")
   updateFearTargetDropdown(playerArray);
 ```
 
@@ -445,8 +445,8 @@ Validations: requires non-empty message, selected entity, and active multiplayer
 Toggles between the Chat and Voice of the Fears tabs. Updates button border/colour/weight states and calls `selectFearEntity(fearSelectedEntity)` on first switch to the Fears tab to ensure the active entity is highlighted.
 
 ```javascript
-switchChatTab('chat');  // show chat, hide fears
-switchChatTab('fears'); // show fears, hide chat
+switchChatTab("chat"); // show chat, hide fears
+switchChatTab("fears"); // show fears, hide chat
 ```
 
 ### Player Functions (`voice-of-fears.js`)
@@ -474,18 +474,22 @@ Added at the end of `setupMultiplayerListeners()`:
 
 ```javascript
 // Voice of the Fears — listen for subliminal messages directed at this player
-firebase.database()
+firebase
+  .database()
   .ref(`rooms/${multiplayerManager.roomCode}/sharedData/fearMessages`)
-  .on('child_added', (snapshot) => {
+  .on("child_added", (snapshot) => {
     const data = snapshot.val();
     if (!data || data.delivered) return;
     // Ignore messages not directed at this player
-    if (data.targetPlayerId !== 'all' &&
-        data.targetPlayerId !== multiplayerManager.playerId) return;
+    if (
+      data.targetPlayerId !== "all" &&
+      data.targetPlayerId !== multiplayerManager.playerId
+    )
+      return;
     // Ignore stale messages (>15s old) to prevent replay on reconnect
     if (data.timestamp < Date.now() - 15000) return;
     snapshot.ref.update({ delivered: true });
-    if (typeof showFearMessage === 'function') showFearMessage(data);
+    if (typeof showFearMessage === "function") showFearMessage(data);
   });
 ```
 
@@ -493,10 +497,10 @@ The `delivered` flag prevents a second listener event from showing the overlay t
 
 ### State Variables
 
-| Variable | Default | Purpose |
-|---|---|---|
-| `fearSelectedEntity` | `"eye"` | Currently selected entity key |
-| `fearDuration` | `3000` | Display duration in milliseconds |
+| Variable             | Default | Purpose                            |
+| -------------------- | ------- | ---------------------------------- |
+| `fearSelectedEntity` | `"eye"` | Currently selected entity key      |
+| `fearDuration`       | `3000`  | Display duration in milliseconds   |
 | `fearStylesInjected` | `false` | Guards against injecting CSS twice |
 
 ---

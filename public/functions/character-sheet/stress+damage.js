@@ -37,7 +37,7 @@ function resetStress() {
     "Are you sure you want to reset Stress to 0?\n\n" +
       "This will clear all current stress points.\n\n" +
       "(Supernatural Stress cannot be reset)\n\n" +
-      "Note: This does NOT affect your Damage Track state."
+      "Note: This does NOT affect your Damage Track state.",
   );
 
   if (!confirmation) return;
@@ -61,7 +61,7 @@ function addSuperStress() {
     alert(
       `Cannot add Supernatural Stress!\n\n` +
         `You are already at the maximum of 10 Stress from Supernatural Sources.\n\n` +
-        `You cannot gain any more Stress from Supernatural Sources.`
+        `You cannot gain any more Stress from Supernatural Sources.`,
     );
     return;
   }
@@ -71,7 +71,7 @@ function addSuperStress() {
       `Current: ${currentSuper}\n` +
       `New Total: ${currentSuper + 1}\n\n` +
       `WARNING: Stress from Supernatural Sources cannot be reduced once gained!\n` +
-      `THIS CANNOT BE UNDONE!`
+      `THIS CANNOT BE UNDONE!`,
   );
 
   if (!confirmation) return;
@@ -86,7 +86,7 @@ function addSuperStress() {
     `Supernatural Stress increased by 1.\n\n` +
       `Total Supernatural Stress: ${character.supernaturalStress}/10\n\n` +
       (atMax ? `⚠️ YOU HAVE REACHED MAXIMUM SUPERNATURAL STRESS!\n\n` : "") +
-      `Note: This does NOT automatically affect your Damage Track.`
+      `Note: This does NOT automatically affect your Damage Track.`,
   );
   checkAvatarRequirements();
   updateAvatarTabVisibility();
@@ -96,7 +96,7 @@ function updateSuperStressDisplay() {
   const displayElement = document.getElementById("superStressDisplay");
   const stressNumber = displayElement;
   const stressBox = document.querySelector(
-    ".supernatural-stress-value-display"
+    ".supernatural-stress-value-display",
   );
 
   if (displayElement) {
@@ -110,7 +110,7 @@ function updateSuperStressDisplay() {
       "stress-5-6",
       "stress-7-8",
       "stress-9",
-      "stress-10"
+      "stress-10",
     );
 
     // Add appropriate class based on stress level
@@ -139,7 +139,7 @@ function updateSuperStressDisplay() {
     }
 
     console.log(
-      `Supernatural Stress updated to ${character.supernaturalStress} with visual effects`
+      `Supernatural Stress updated to ${character.supernaturalStress} with visual effects`,
     );
   }
 }
@@ -184,7 +184,7 @@ function changeDamageState(direction) {
   const currentIndex = states.indexOf(character.damageState || "hale");
   const newIndex = Math.max(
     0,
-    Math.min(states.length - 1, currentIndex + direction)
+    Math.min(states.length - 1, currentIndex + direction),
   );
 
   character.damageState = states[newIndex];

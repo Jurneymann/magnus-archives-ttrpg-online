@@ -49,10 +49,11 @@ The Battle Map System provides comprehensive visual position tracking for combat
 
 When the **Wall**, **Door**, or **Window** tool is selected, two draw modes are available via the toggle above the terrain buttons:
 
-- **⬛ Square Mode** *(default)*: Fills entire grid squares with the selected terrain type. Best for thick walls, solid room interiors, and large obstacles.
-- **⬜ Edge Mode**: Draws thin lines on the *edge* between two grid squares rather than filling a whole square. Perfect for realistic building walls, doors in doorframes, and windows set into walls.
+- **⬛ Square Mode** _(default)_: Fills entire grid squares with the selected terrain type. Best for thick walls, solid room interiors, and large obstacles.
+- **⬜ Edge Mode**: Draws thin lines on the _edge_ between two grid squares rather than filling a whole square. Perfect for realistic building walls, doors in doorframes, and windows set into walls.
 
 **How Edge Mode works:**
+
 1. Select **Wall**, **Door**, or **Window** tool
 2. Click **⬜ Edge** button to switch to Edge Mode
 3. Click and drag across the map — the nearest cell edge (north, south, east, or west side) is highlighted
@@ -398,6 +399,7 @@ Maps are saved as JSON with the following structure:
 - `x`, `y`: Grid coordinates of the cell
 - `edge`: Which side of the cell — `"n"` (north/top), `"s"` (south/bottom), `"e"` (east/right), `"w"` (west/left)
 - `type`: `"wall"`, `"door"`, or `"window"`
+
 ```
 
 ### Terrain Types
@@ -589,6 +591,7 @@ For issues or feature requests, please contact the tool maintainer or submit an 
 
 ---
 
-**Battle Map System v2.3**  
-_Part of the Magnus Archives GM Tool_  
+**Battle Map System v2.3**
+_Part of the Magnus Archives GM Tool_
 _Updated: March 2026_
+```

@@ -8,7 +8,7 @@ function initializeCypherTable() {
   if (cypherSection && !document.querySelector(".cypher-section-header")) {
     // Insert header before the table
     const tableContainer = cypherSection.querySelector(
-      ".cyphers-table-container"
+      ".cyphers-table-container",
     );
     if (tableContainer) {
       tableContainer.insertAdjacentHTML("beforebegin", headerHTML);
@@ -83,7 +83,7 @@ function renderCypherTable() {
 function drawCypher() {
   // Check if there are any empty slots
   const emptySlotIndex = assignedCyphers.findIndex(
-    (c, i) => i < character.cypherSlots && !c
+    (c, i) => i < character.cypherSlots && !c,
   );
 
   if (
@@ -91,7 +91,7 @@ function drawCypher() {
     assignedCyphers.length >= character.cypherSlots
   ) {
     alert(
-      "All cypher slots are full! Use or discard a cypher before drawing a new one."
+      "All cypher slots are full! Use or discard a cypher before drawing a new one.",
     );
     return;
   }
@@ -158,7 +158,7 @@ function drawCypher() {
     const level = parseInt(cypher.level);
     cypher.calculatedEdgeBonus = level >= 5 ? 2 : 1;
     console.log(
-      `✓ Calculated Edge Bonus: +${cypher.calculatedEdgeBonus} ${cypher.EdgeBonusStat} Edge`
+      `✓ Calculated Edge Bonus: +${cypher.calculatedEdgeBonus} ${cypher.EdgeBonusStat} Edge`,
     );
   }
 
@@ -206,7 +206,7 @@ function showCypherRollEffectTable(cypherName) {
   if (!rollEffectSection) {
     console.error("✗ cypherRollEffectSection element not found in HTML!");
     alert(
-      "Error: Roll effect section not found. Please check the HTML structure."
+      "Error: Roll effect section not found. Please check the HTML structure.",
     );
     return;
   }
@@ -217,7 +217,7 @@ function showCypherRollEffectTable(cypherName) {
   if (typeof CYPHERS_ROLLEFFECT === "undefined") {
     console.error("✗ CYPHERS_ROLLEFFECT is not loaded!");
     alert(
-      "Error: Roll effect data not loaded. Please check that cyphers.js is loaded."
+      "Error: Roll effect data not loaded. Please check that cyphers.js is loaded.",
     );
     return;
   }
@@ -225,19 +225,19 @@ function showCypherRollEffectTable(cypherName) {
   console.log(
     "✓ CYPHERS_ROLLEFFECT loaded with",
     CYPHERS_ROLLEFFECT.length,
-    "entries"
+    "entries",
   );
 
   // Filter effects for this specific cypher
   const relevantEffects = CYPHERS_ROLLEFFECT.filter(
-    (effect) => effect.cypher === cypherName
+    (effect) => effect.cypher === cypherName,
   );
 
   console.log(
     "✓ Found",
     relevantEffects.length,
     "relevant effects for",
-    cypherName
+    cypherName,
   );
 
   if (relevantEffects.length === 0) {
@@ -346,7 +346,7 @@ function rollCypherEffect() {
     alert(
       `Roll: ${displayRoll}\n\n` +
         `Effect: ${matchedEffect}\n\n` +
-        `The highlighted row shows your result.`
+        `The highlighted row shows your result.`,
     );
   }
 }
@@ -408,7 +408,7 @@ function updateCypherBoosts() {
 
     if (!statsSection) {
       console.warn(
-        "statsSection not found, cannot create cypher boost container"
+        "statsSection not found, cannot create cypher boost container",
       );
       return;
     }
@@ -443,7 +443,10 @@ function updateCypherBoosts() {
   // Get cyphers with Edge bonuses
   const cyphersWithBoosts = assignedCyphers.filter(
     (c, i) =>
-      c && i < character.cypherSlots && c.EdgeBonusStat && c.calculatedEdgeBonus
+      c &&
+      i < character.cypherSlots &&
+      c.EdgeBonusStat &&
+      c.calculatedEdgeBonus,
   );
 
   console.log("Cyphers with boosts:", cyphersWithBoosts.length);
@@ -468,7 +471,7 @@ function updateCypherBoosts() {
     const isActive = character.activeCypherBoosts[cypherIndex] || false;
 
     console.log(
-      `Creating boost card for ${cypher.name} (index ${cypherIndex}, active: ${isActive})`
+      `Creating boost card for ${cypher.name} (index ${cypherIndex}, active: ${isActive})`,
     );
 
     const boostCard = document.createElement("div");
@@ -495,8 +498,8 @@ function updateCypherBoosts() {
           }</p>
           <div style="color: #FFD700; font-weight: bold;">
             +${cypher.calculatedEdgeBonus} ${
-      cypher.EdgeBonusStat
-    } Edge for 1 hour
+              cypher.EdgeBonusStat
+            } Edge for 1 hour
           </div>
           <div style="margin-top: 8px; color: #888; font-size: 0.85em;">
             ${cypher.action} | Once used, cypher is consumed
@@ -561,7 +564,7 @@ function toggleCypherBoost(cypherIndex) {
     // Deactivate
     alert(
       `To deactivate this cypher boost, use the "Remove Early" button.\n\n` +
-        `This allows you to track the 1-hour duration separately.`
+        `This allows you to track the 1-hour duration separately.`,
     );
     return;
   }
@@ -578,7 +581,7 @@ function toggleCypherBoost(cypherIndex) {
         character.edge[cypher.EdgeBonusStat] + cypher.calculatedEdgeBonus
       }\n\n` +
       `The cypher will be consumed after 1 hour or when you remove the effect.\n\n` +
-      `Activate now?`
+      `Activate now?`,
   );
 
   if (!confirmation) return;
@@ -589,7 +592,7 @@ function toggleCypherBoost(cypherIndex) {
   const newEdge = character.edge[cypher.EdgeBonusStat];
 
   console.log(
-    `✓ Applied +${cypher.calculatedEdgeBonus} to ${cypher.EdgeBonusStat} Edge`
+    `✓ Applied +${cypher.calculatedEdgeBonus} to ${cypher.EdgeBonusStat} Edge`,
   );
   console.log(`  - Old Edge: ${oldEdge}`);
   console.log(`  - New Edge: ${newEdge}`);
@@ -607,7 +610,7 @@ function toggleCypherBoost(cypherIndex) {
     `${cypher.name} activated!\n\n` +
       `${cypher.EdgeBonusStat} Edge: ${oldEdge} → ${newEdge}\n\n` +
       `Effect will last for 1 hour.\n` +
-      `The cypher will be consumed when the effect ends or is removed early.`
+      `The cypher will be consumed when the effect ends or is removed early.`,
   );
 }
 
@@ -628,7 +631,7 @@ function deactivateCypherBoost(cypherIndex) {
         character.edge[cypher.EdgeBonusStat] - cypher.calculatedEdgeBonus
       }\n\n` +
       `The cypher will be consumed.\n\n` +
-      `Continue?`
+      `Continue?`,
   );
 
   if (!confirmation) return;
@@ -639,7 +642,7 @@ function deactivateCypherBoost(cypherIndex) {
   const newEdge = character.edge[cypher.EdgeBonusStat];
 
   console.log(
-    `✓ Removed +${cypher.calculatedEdgeBonus} from ${cypher.EdgeBonusStat} Edge`
+    `✓ Removed +${cypher.calculatedEdgeBonus} from ${cypher.EdgeBonusStat} Edge`,
   );
   console.log(`  - Old Edge: ${oldEdge}`);
   console.log(`  - New Edge: ${newEdge}`);
@@ -660,13 +663,13 @@ function deactivateCypherBoost(cypherIndex) {
   alert(
     `${cypher.name} effect ended.\n\n` +
       `${cypher.EdgeBonusStat} Edge: ${oldEdge} → ${newEdge}\n\n` +
-      `The cypher has been consumed.`
+      `The cypher has been consumed.`,
   );
 
   // Check if any remaining cyphers need the roll table
   const hasRollEffectCypher = assignedCyphers.some(
     (c) =>
-      c && (c.name === "Librarian's pupil" || c.name === "Learn from The Web")
+      c && (c.name === "Librarian's pupil" || c.name === "Learn from The Web"),
   );
 
   if (!hasRollEffectCypher) {
@@ -753,7 +756,7 @@ function removeCypher(index) {
     alert(
       `This cypher's effect is currently active!\n\n` +
         `You must deactivate the boost before discarding the cypher.\n\n` +
-        `Use the "Remove Early" button in the Cypher Edge Boosts section.`
+        `Use the "Remove Early" button in the Cypher Edge Boosts section.`,
     );
     return;
   }
@@ -783,7 +786,7 @@ function removeCypher(index) {
         `Use "${cypher.name}"?\n\n` +
           `${cypher.effect}\n\n` +
           `This cypher would restore ${restoreAmount} ${poolName} Pool points, but your ${poolName} Pool is already at maximum (${maxPool}).\n\n` +
-          `No points will be restored. Continue anyway?`
+          `No points will be restored. Continue anyway?`,
       );
 
       if (!confirmation) {
@@ -809,7 +812,7 @@ function removeCypher(index) {
           }.\n\n` +
           `Current ${poolName} Pool: ${currentPool}/${maxPool}\n` +
           `After use: ${currentPool + actualRestore}/${maxPool}\n\n` +
-          `Continue?`
+          `Continue?`,
       );
 
       if (!confirmation) {
@@ -828,7 +831,7 @@ function removeCypher(index) {
 
       // Update display
       const poolElement = document.getElementById(
-        `${poolName.toLowerCase()}Pool`
+        `${poolName.toLowerCase()}Pool`,
       );
 
       console.log("Pool element:", poolElement);
@@ -837,7 +840,7 @@ function removeCypher(index) {
         poolElement.textContent = character.currentPools[poolName];
         console.log(
           "✓ Updated pool display to:",
-          character.currentPools[poolName]
+          character.currentPools[poolName],
         );
       } else {
         console.error("✗ Pool element not found!");
@@ -855,14 +858,14 @@ function removeCypher(index) {
           `Restored ${actualRestore} point${
             actualRestore !== 1 ? "s" : ""
           } to ${poolName} Pool.\n\n` +
-          `${poolName} Pool: ${currentPool} → ${character.currentPools[poolName]}`
+          `${poolName} Pool: ${currentPool} → ${character.currentPools[poolName]}`,
       );
     }
   } else {
     console.log("No PoolGain property - treating as normal cypher");
     // Normal cypher without PoolGain - just discard
     const confirmation = confirm(
-      `Are you sure you want to use/discard "${cypher.name}"?`
+      `Are you sure you want to use/discard "${cypher.name}"?`,
     );
 
     if (!confirmation) {
@@ -880,7 +883,7 @@ function removeCypher(index) {
   // Check if any remaining cyphers need the roll table
   const hasRollEffectCypher = assignedCyphers.some(
     (c) =>
-      c && (c.name === "Librarian's pupil" || c.name === "Learn from The Web")
+      c && (c.name === "Librarian's pupil" || c.name === "Learn from The Web"),
   );
 
   if (!hasRollEffectCypher) {
@@ -902,7 +905,7 @@ function updateDrawCypherButton() {
 
   // Update slots display
   const filledSlots = assignedCyphers.filter(
-    (c, i) => i < character.cypherSlots && c
+    (c, i) => i < character.cypherSlots && c,
   ).length;
   document.getElementById("cypherSlotsUsed").textContent = filledSlots;
 }
@@ -958,7 +961,7 @@ function updateSelectedDisplay() {
           <span class="item-meta">Tier ${ability.tier || character.tier}</span>
           <button class="remove-btn" onclick="removeAbility(${idx})">Remove</button>
         </div>
-      `
+      `,
         )
         .join("");
     } else {
@@ -983,7 +986,10 @@ function debugCypherBoosts() {
 
   const cyphersWithBoosts = assignedCyphers.filter(
     (c, i) =>
-      c && i < character.cypherSlots && c.EdgeBonusStat && c.calculatedEdgeBonus
+      c &&
+      i < character.cypherSlots &&
+      c.EdgeBonusStat &&
+      c.calculatedEdgeBonus,
   );
 
   console.log("Cyphers with Edge bonuses:", cyphersWithBoosts);

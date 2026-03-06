@@ -105,8 +105,8 @@ let battleMap = {
 // ==================== UNDO/REDO HISTORY ==================== //
 
 const battleMapHistory = {
-  past: [],    // Terrain snapshots (oldest → newest)
-  future: [],  // Terrain snapshots for redo (most recent first)
+  past: [], // Terrain snapshots (oldest → newest)
+  future: [], // Terrain snapshots for redo (most recent first)
   maxSize: 50, // Cap to prevent memory bloat
 };
 
@@ -6126,7 +6126,11 @@ function handleBattleMapKeyPress(e) {
       undoBattleMapAction();
       return;
     }
-    if (e.key === "y" || (e.key === "z" && e.shiftKey) || (e.key === "Z" && e.shiftKey)) {
+    if (
+      e.key === "y" ||
+      (e.key === "z" && e.shiftKey) ||
+      (e.key === "Z" && e.shiftKey)
+    ) {
       e.preventDefault();
       redoBattleMapAction();
       return;

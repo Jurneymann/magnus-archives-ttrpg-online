@@ -1,5 +1,7 @@
 # The Magnus Archives Online
 
+![Magnus Archives GM Tool](public/assets/MagnusHeader.png)
+
 ## Online Multiplayer RPG Portal
 
 A comprehensive web-based toolset for running **online and local** tabletop RPG campaigns set in The Magnus Archives universe. The Magnus Archives Online brings your investigations into the digital realm with real-time multiplayer sessions, allowing Game Masters and players to connect from anywhere in the world—completely free!
@@ -16,8 +18,6 @@ A comprehensive web-based toolset for running **online and local** tabletop RPG 
 **Created by**: [Jurneymann](https://github.com/Jurneymann)
 
 This project is free for use, but if you would like to contribute to my development costs, you can support me at [buymeacoffee/jurneymann](buymeacoffee.com/jurneymann)
-
-![Magnus Archives GM Tool](public/assets/MagnusHeader.png)
 
 ## About The Magnus Archives
 

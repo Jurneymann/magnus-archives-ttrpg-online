@@ -99,8 +99,8 @@ In edge mode, the mouse position within a cell is compared against the centre po
 
 ```javascript
 const battleMapHistory = {
-  past: [],    // Terrain snapshots (oldest â†’ newest), max 50 entries
-  future: [],  // Redo stack (most recent first)
+  past: [], // Terrain snapshots (oldest â†’ newest), max 50 entries
+  future: [], // Redo stack (most recent first)
   maxSize: 50,
 };
 ```
@@ -111,12 +111,12 @@ Each snapshot is a lightweight array of `{ id, terrain, edgeWalls }` per layer â
 
 `saveBattleMapSnapshot()` is called immediately **before** any terrain mutation:
 
-| Operation             | Trigger location in code                                      |
-|-----------------------|---------------------------------------------------------------|
-| Erase (square or edge)| Top of the erase branch in `handleBattleMapClick()`           |
-| Edge wall line        | Before `drawWallsBetweenCorners()` on the second corner click |
-| Square terrain paint  | Before `layer.terrain.push()` in `handleBattleMapClick()`     |
-| Clear all terrain     | Before `layer.terrain = []` in `clearBattleMapTerrain()`      |
+| Operation              | Trigger location in code                                      |
+| ---------------------- | ------------------------------------------------------------- |
+| Erase (square or edge) | Top of the erase branch in `handleBattleMapClick()`           |
+| Edge wall line         | Before `drawWallsBetweenCorners()` on the second corner click |
+| Square terrain paint   | Before `layer.terrain.push()` in `handleBattleMapClick()`     |
+| Clear all terrain      | Before `layer.terrain = []` in `clearBattleMapTerrain()`      |
 
 ### History Stack Behaviour
 
@@ -127,11 +127,11 @@ Each snapshot is a lightweight array of `{ id, terrain, edgeWalls }` per layer â
 
 ### Keyboard Shortcuts
 
-| Shortcut        | Action |
-|-----------------|--------|
-| `Ctrl+Z`        | Undo   |
-| `Ctrl+Y`        | Redo   |
-| `Ctrl+Shift+Z`  | Redo   |
+| Shortcut       | Action |
+| -------------- | ------ |
+| `Ctrl+Z`       | Undo   |
+| `Ctrl+Y`       | Redo   |
+| `Ctrl+Shift+Z` | Redo   |
 
 These are handled inside the existing `handleBattleMapKeyPress()` listener, which already guards against firing when an `<input>` or `<textarea>` is focused.
 
@@ -373,12 +373,12 @@ rooms/{roomCode}/battleMapPings/
 
 ## Version History
 
-| Version | Date     | Notes                                                                                   |
-| ------- | -------- | --------------------------------------------------------------------------------------- |
-| v1.0    | Jan 2026 | Initial: basic grid, 6 terrain types, tokens, zoom, save/load (~600 lines)              |
-| v2.0    | Feb 2026 | Layer system, multiplayer sync, battle map pings, preset management                     |
-| v2.3    | Mar 2026 | Edge wall draw mode, door + window terrain types, UI overhaul (~6,700 lines)            |
-| v2.4    | Mar 2026 | Undo/redo (50-step history per session, Ctrl+Z / Ctrl+Y + toolbar buttons)              |
+| Version | Date     | Notes                                                                        |
+| ------- | -------- | ---------------------------------------------------------------------------- |
+| v1.0    | Jan 2026 | Initial: basic grid, 6 terrain types, tokens, zoom, save/load (~600 lines)   |
+| v2.0    | Feb 2026 | Layer system, multiplayer sync, battle map pings, preset management          |
+| v2.3    | Mar 2026 | Edge wall draw mode, door + window terrain types, UI overhaul (~6,700 lines) |
+| v2.4    | Mar 2026 | Undo/redo (50-step history per session, Ctrl+Z / Ctrl+Y + toolbar buttons)   |
 
 ---
 

@@ -233,10 +233,9 @@ async function sendFearMessage() {
 
   const targetEl = document.getElementById("fearTarget");
   const targetId = targetEl ? targetEl.value : "all";
-  const targetName =
-    targetEl
-      ? targetEl.options[targetEl.selectedIndex]?.text || "All Players"
-      : "All Players";
+  const targetName = targetEl
+    ? targetEl.options[targetEl.selectedIndex]?.text || "All Players"
+    : "All Players";
 
   const entity = fearEntities[fearSelectedEntity];
   const payload = {
@@ -250,9 +249,7 @@ async function sendFearMessage() {
 
   try {
     await multiplayerManager.db
-      .ref(
-        `rooms/${multiplayerManager.roomCode}/sharedData/fearMessages`,
-      )
+      .ref(`rooms/${multiplayerManager.roomCode}/sharedData/fearMessages`)
       .push(payload);
 
     // Log to GM chat with a fear flag so it renders distinctly
@@ -304,14 +301,18 @@ function switchChatTab(tab) {
 
   // Chat tab active styling
   if (chatBtn) {
-    chatBtn.style.borderBottom = isChat ? "2px solid #ff9800" : "2px solid transparent";
+    chatBtn.style.borderBottom = isChat
+      ? "2px solid #ff9800"
+      : "2px solid transparent";
     chatBtn.style.background = isChat ? "rgba(255,152,0,0.1)" : "transparent";
     chatBtn.style.color = isChat ? "#ffb74d" : "#888";
     chatBtn.style.fontWeight = isChat ? "bold" : "normal";
   }
   // Fears tab active styling
   if (fearsBtn) {
-    fearsBtn.style.borderBottom = isChat ? "2px solid transparent" : "2px solid #9C27B0";
+    fearsBtn.style.borderBottom = isChat
+      ? "2px solid transparent"
+      : "2px solid #9C27B0";
     fearsBtn.style.background = isChat ? "transparent" : "rgba(120,0,160,0.12)";
     fearsBtn.style.color = isChat ? "#888" : "#CE93D8";
     fearsBtn.style.fontWeight = isChat ? "normal" : "bold";
@@ -649,9 +650,7 @@ function showFearMessage(data) {
   // Remove any existing overlay
   const existing = document.getElementById("fearOverlay");
   if (existing) existing.remove();
-  document
-    .querySelectorAll(".fear-hunt-bar")
-    .forEach((el) => el.remove());
+  document.querySelectorAll(".fear-hunt-bar").forEach((el) => el.remove());
 
   const overlay = document.createElement("div");
   overlay.id = "fearOverlay";
@@ -687,7 +686,9 @@ function showFearMessage(data) {
     ["top: 0", "bottom: 0"].forEach((pos) => {
       const bar = document.createElement("div");
       bar.className = "fear-hunt-bar";
-      bar.style.cssText = pos + "; left: 0; right: 0; height: 90px; background: #000; position: fixed; z-index: 100000; pointer-events: none;";
+      bar.style.cssText =
+        pos +
+        "; left: 0; right: 0; height: 90px; background: #000; position: fixed; z-index: 100000; pointer-events: none;";
       document.body.appendChild(bar);
     });
   }
@@ -704,12 +705,10 @@ function showFearMessage(data) {
   const fadeMs = 700;
   setTimeout(() => {
     overlay.classList.add("fear-fading");
-    document
-      .querySelectorAll(".fear-hunt-bar")
-      .forEach((el) => {
-        el.style.transition = "opacity 0.7s ease";
-        el.style.opacity = "0";
-      });
+    document.querySelectorAll(".fear-hunt-bar").forEach((el) => {
+      el.style.transition = "opacity 0.7s ease";
+      el.style.opacity = "0";
+    });
     setTimeout(() => {
       if (overlay.parentNode) overlay.remove();
       document.querySelectorAll(".fear-hunt-bar").forEach((el) => el.remove());

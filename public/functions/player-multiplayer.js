@@ -360,9 +360,7 @@ function setupMultiplayerListeners() {
   if (multiplayerManager.roomCode) {
     firebase
       .database()
-      .ref(
-        `rooms/${multiplayerManager.roomCode}/sharedData/fearMessages`
-      )
+      .ref(`rooms/${multiplayerManager.roomCode}/sharedData/fearMessages`)
       .on("child_added", (snapshot) => {
         const data = snapshot.val();
         if (!data || data.delivered) return;
@@ -971,41 +969,140 @@ function displayPlayerChatMessage(msg, sentByUs = false) {
 function highlightSwearWords(text) {
   const swearWords = [
     // Common profanity
-    'damn', 'hell', 'crap', 'shit', 'fuck', 'ass', 'bastard', 'bitch',
-    'piss', 'dick', 'cock', 'pussy', 'cunt', 'wank', 'bollocks', 'bloody',
-    'arse', 'git', 'bugger', 'twat', 'tosser', 'prick', 'douche', 'jackass',
+    "damn",
+    "hell",
+    "crap",
+    "shit",
+    "fuck",
+    "ass",
+    "bastard",
+    "bitch",
+    "piss",
+    "dick",
+    "cock",
+    "pussy",
+    "cunt",
+    "wank",
+    "bollocks",
+    "bloody",
+    "arse",
+    "git",
+    "bugger",
+    "twat",
+    "tosser",
+    "prick",
+    "douche",
+    "jackass",
     // Variations and compounds
-    'shite', 'feck', 'frick', 'frigging', 'effing', 'goddam', 'goddamn', 'dammit',
-    'asshole', 'arsehole', 'motherfucker', 'bullshit', 'horseshit', 'chickenshit',
-    'apeshit', 'batshit', 'shitty', 'fucked', 'fucking', 'fucker', 'fuckface',
+    "shite",
+    "feck",
+    "frick",
+    "frigging",
+    "effing",
+    "goddam",
+    "goddamn",
+    "dammit",
+    "asshole",
+    "arsehole",
+    "motherfucker",
+    "bullshit",
+    "horseshit",
+    "chickenshit",
+    "apeshit",
+    "batshit",
+    "shitty",
+    "fucked",
+    "fucking",
+    "fucker",
+    "fuckface",
     // British/Australian slang
-    'bellend', 'knob', 'knobhead', 'wanker', 'pillock', 'plonker', 'minger',
-    'numpty', 'berk', 'muppet', 'slag', 'scrubber', 'tart', 'slapper',
+    "bellend",
+    "knob",
+    "knobhead",
+    "wanker",
+    "pillock",
+    "plonker",
+    "minger",
+    "numpty",
+    "berk",
+    "muppet",
+    "slag",
+    "scrubber",
+    "tart",
+    "slapper",
     // Body parts and crude terms
-    'tits', 'boobs', 'titties', 'balls', 'bollocks', 'nuts', 'schlong',
-    'fanny', 'cooch', 'cooter', 'beaver', 'muff', 'taint', 'choad',
+    "tits",
+    "boobs",
+    "titties",
+    "balls",
+    "bollocks",
+    "nuts",
+    "schlong",
+    "fanny",
+    "cooch",
+    "cooter",
+    "beaver",
+    "muff",
+    "taint",
+    "choad",
     // Insults
-    'douchebag', 'dumbass', 'dipshit', 'shithead', 'dickhead', 'asswipe',
-    'butthead', 'bonehead', 'numbnuts', 'douchenozzle', 'fuckwit', 'twatwaffle',
-    'cumstain', 'shitstain', 'cocksucker', 'cockwomble', 'thundercunt',
+    "douchebag",
+    "dumbass",
+    "dipshit",
+    "shithead",
+    "dickhead",
+    "asswipe",
+    "butthead",
+    "bonehead",
+    "numbnuts",
+    "douchenozzle",
+    "fuckwit",
+    "twatwaffle",
+    "cumstain",
+    "shitstain",
+    "cocksucker",
+    "cockwomble",
+    "thundercunt",
     // Milder cursing
-    'poo', 'poopy', 'turd', 'arse', 'butt', 'booty', 'dang', 'darn',
-    'heck', 'crud', 'balls', 'ballsack', 'nuts', 'screwed', 'screw',
+    "poo",
+    "poopy",
+    "turd",
+    "arse",
+    "butt",
+    "booty",
+    "dang",
+    "darn",
+    "heck",
+    "crud",
+    "balls",
+    "ballsack",
+    "nuts",
+    "screwed",
+    "screw",
     // Slang and crude
-    'whore', 'slut', 'ho', 'skank', 'tramp', 'hussy', 'hooker', 'prostitute',
-    'pimp', 'bastards', 'bitches', 'shits', 'fucks', 'asses'
+    "whore",
+    "slut",
+    "ho",
+    "skank",
+    "tramp",
+    "hussy",
+    "hooker",
+    "prostitute",
+    "pimp",
+    "bastards",
+    "bitches",
+    "shits",
+    "fucks",
+    "asses",
   ];
 
   // Escape HTML first
-  const div = document.createElement('div');
+  const div = document.createElement("div");
   div.textContent = text;
   let escapedText = div.innerHTML;
 
   // Create regex pattern that matches whole words only
-  const pattern = new RegExp(
-    '\\b(' + swearWords.join('|') + ')\\b',
-    'gi'
-  );
+  const pattern = new RegExp("\\b(" + swearWords.join("|") + ")\\b", "gi");
 
   // Replace with highlighted version
   escapedText = escapedText.replace(pattern, (match) => {

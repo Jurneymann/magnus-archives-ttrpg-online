@@ -7,21 +7,25 @@
 ### New Files Created
 
 #### HTML Pages
+
 1. **`welcome.html`** - Beautiful landing page where users choose:
    - Start a Game (GM)
    - Join a Game (Player)
    - Create Character
 
 #### JavaScript Functions
+
 2. **`functions/firebase-config.js`** - Firebase configuration file (needs your Firebase credentials)
 3. **`functions/multiplayer.js`** - Core multiplayer manager class with room management
 4. **`functions/gm-multiplayer.js`** - GM-specific multiplayer features
 5. **`functions/player-multiplayer.js`** - Player-specific multiplayer features
 
 #### Styling
+
 6. **`styles/multiplayer.css`** - Multiplayer UI styling
 
 #### Documentation
+
 7. **`MULTIPLAYER_QUICKSTART.md`** - 5-minute setup guide
 8. **`MULTIPLAYER_SETUP.md`** - Detailed Firebase setup instructions
 9. **`MULTIPLAYER_FEATURES.md`** - Complete feature guide with tips
@@ -216,6 +220,7 @@
 - ✅ **100,000 daily reads**
 
 **Typical RPG session:**
+
 - 1 GM + 4 players = **5 connections**
 - Character data = **~5KB each**
 - 4-hour session = **~50MB data**
@@ -227,15 +232,19 @@
 ## 🐛 Troubleshooting Quick Guide
 
 ### "Firebase not configured"
+
 → Edit `functions/firebase-config.js` with your Firebase credentials
 
 ### Room code not working
+
 → GM must start session first; check code spelling
 
 ### Players not appearing
+
 → Check Firebase database rules; refresh browser
 
 ### Can't connect
+
 → Check browser console (F12); verify internet connection
 
 **Full troubleshooting**: See MULTIPLAYER_FEATURES.md
@@ -247,6 +256,7 @@
 Start here: **MULTIPLAYER_QUICKSTART.md** (5-minute setup)
 
 For detailed info:
+
 - **MULTIPLAYER_SETUP.md** - Firebase configuration
 - **MULTIPLAYER_FEATURES.md** - How to use all features
 - **README.md** - Updated with multiplayer info

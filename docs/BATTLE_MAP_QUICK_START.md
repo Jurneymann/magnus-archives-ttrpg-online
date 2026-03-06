@@ -28,15 +28,15 @@
 
 ### Terrain Colors
 
-| Type      | Color                  | Passable | Notes |
-| --------- | ---------------------- | -------- | ----- |
+| Type      | Color                  | Passable | Notes          |
+| --------- | ---------------------- | -------- | -------------- |
 | Wall      | Dark Gray (#424242)    | No       | Square or edge |
 | Door      | Brown (#8B4513)        | Yes      | Square or edge |
 | Window    | Sky Blue (#87CEEB)     | No       | Square or edge |
-| Furniture | Dark Brown (#6D4C41)   | No       | Square only |
-| Landscape | Green (#2E7D32)        | Yes      | Square only |
-| Water     | Blue (#1976D2)         | Yes      | Square only |
-| Difficult | Yellow-Amber (#F9A825) | Yes      | Square only |
+| Furniture | Dark Brown (#6D4C41)   | No       | Square only    |
+| Landscape | Green (#2E7D32)        | Yes      | Square only    |
+| Water     | Blue (#1976D2)         | Yes      | Square only    |
+| Difficult | Yellow-Amber (#F9A825) | Yes      | Square only    |
 
 ## Quick Workflow
 
