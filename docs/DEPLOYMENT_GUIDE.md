@@ -238,34 +238,11 @@ firebase init
 
 ---
 
-### Step 8: Prepare Files for Deployment
+### Step 8: Verify Files Are Ready
 
-1. [ ] Remove the sample file Firebase created:
+This repository uses `public/` as the Firebase Hosting root. All site files are already there — no copying required.
 
-```powershell
-Remove-Item "public\index.html" -Force
-```
-
-2. [ ] Copy all your project files to the `public/` directory:
-
-```powershell
-# Copy HTML files
-Copy-Item -Path "index.html", "player-view.html", "welcome.html" -Destination "public\" -Force
-
-# Copy directories
-Copy-Item -Path "assets" -Destination "public\" -Recurse -Force
-Copy-Item -Path "databases" -Destination "public\" -Recurse -Force
-Copy-Item -Path "functions" -Destination "public\" -Recurse -Force
-Copy-Item -Path "reference" -Destination "public\" -Recurse -Force
-Copy-Item -Path "styles" -Destination "public\" -Recurse -Force
-Copy-Item -Path "tables" -Destination "public\" -Recurse -Force
-Copy-Item -Path "dice-main" -Destination "public\" -Recurse -Force
-
-# Copy README files
-Copy-Item -Path "*.md" -Destination "public\" -Force
-```
-
-3. [ ] Verify files were copied:
+1. [ ] Confirm `public/` contains your project files:
 
 ```powershell
 Get-ChildItem "public\" | Select-Object Name
@@ -276,16 +253,17 @@ Get-ChildItem "public\" | Select-Object Name
 - index.html
 - player-view.html
 - welcome.html
+- gm-dashboard.html
 - assets/
-- databases/
 - functions/
-- reference/
 - styles/
 - tables/
 - dice-main/
-- Various .md files
+- reference/
 
-**✓ Checkpoint:** All files are in the `public/` directory
+2. [ ] Confirm `public/functions/firebase-config.js` contains your Firebase project config (see [SETUP.md](../SETUP.md) Step 2 if not yet done)
+
+**✓ Checkpoint:** All files are in the `public/` directory and firebase-config.js is configured
 
 ---
 

@@ -5,6 +5,7 @@
 A comprehensive web-based toolset for running **online and local** tabletop RPG campaigns set in The Magnus Archives universe. The Firebase Institute brings your investigations into the digital realm with real-time multiplayer sessions, allowing Game Masters and players to connect from anywhere in the world—completely free!
 
 ### Core Features
+
 - 🌐 **Online Multiplayer**: Host sessions with room codes (like Jackbox!)
 - 🎲 **Complete GM Tools**: Everything you need to manage campaigns
 - 📝 **Character Sheets**: Players create and sync characters in real-time
@@ -34,7 +35,7 @@ This GM Tool is designed to support the **[The Magnus Archives Roleplaying Game]
 - **Real-Time Sync**: Character sheets, stress, and damage sync instantly
 - **No Cost**: Uses Firebase's free tier (generous limits for RPG groups)
 - **No Downloads**: Browser-based, works on any device
-- **GM Controls**: 
+- **GM Controls**:
   - View all connected players in real-time
   - Assign stress/damage with one click
   - Broadcast messages to all players
@@ -45,7 +46,7 @@ This GM Tool is designed to support the **[The Magnus Archives Roleplaying Game]
   - Receive GM updates instantly
   - Create and save characters locally
 
-**Getting Started**: See [MULTIPLAYER_QUICKSTART.md](MULTIPLAYER_QUICKSTART.md) for 5-minute setup guide
+**Getting Started**: See [SETUP.md](SETUP.md) for the full setup guide and [MULTIPLAYER_QUICKSTART.md](docs/MULTIPLAYER_QUICKSTART.md) for a 5-minute walkthrough
 
 ### 📊 Campaign Management
 
@@ -97,29 +98,26 @@ This GM Tool is designed to support the **[The Magnus Archives Roleplaying Game]
 
 ## Getting Started
 
-### Installation
+### Hosting Your Own Instance
 
-1. **Clone or download** this repository
-2. **Open `welcome.html`** in a modern web browser (Chrome, Firefox, Edge recommended)
-3. **Choose your mode**:
-   - **Start a Game (GM)**: Full GM dashboard with all tools
-   - **Join a Game (Player)**: Connect to an online session
-   - **Create Character**: Build and save characters
+**See [SETUP.md](SETUP.md) for a full step-by-step guide.** The short version:
 
-For local/offline use, open `index.html` directly for the GM dashboard.
+1. Clone this repository
+2. Create a free Firebase project at https://console.firebase.google.com/
+3. Add your Firebase config to `public/functions/firebase-config.js`
+4. Run `firebase deploy --only hosting`
+5. Share the live URL with your players
 
-### Multiplayer Setup (Optional, 5 minutes)
+> **No Firebase?** Open `public/index.html` directly in a browser for a fully offline GM dashboard.
 
-To enable online multiplayer sessions:
+### Joining an Existing Session
 
-1. Create a free Firebase account at https://console.firebase.google.com/
-2. Create a new project and enable Realtime Database
-3. Copy your Firebase config to `functions/firebase-config.js`
-4. See [MULTIPLAYER_SETUP.md](MULTIPLAYER_SETUP.md) for detailed instructions
+1. Visit the GM's hosted URL
+2. Click **Join a Game (Player)**
+3. Enter the 6-character room code the GM shares with you
+4. Enter your character name and connect
 
-**No Firebase setup?** The tool still works perfectly offline!
-
-### First Steps
+### First Steps (GM)
 
 1. **Name Your Campaign**: Enter a campaign name at the top of the dashboard
 2. **Add Players**: Navigate to the "Party" tab and add your player characters
@@ -432,7 +430,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Version**: 2.3  
+**Version**: 2.4  
 **Last Updated**: March 2026  
 **Repository**: https://github.com/Jurneymann/magnus-archives-online-private (private)
 
