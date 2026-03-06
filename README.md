@@ -360,6 +360,7 @@ This version of the tool **does not include** pre-loaded creatures, artefacts, o
 ### Version 1.0 — Initial Public Release (March 2026)
 
 **Multiplayer & Session Management**
+
 - ✅ Online multiplayer with Firebase Realtime Database (free tier)
 - ✅ Room-based sessions with 6-character shareable codes
 - ✅ Welcome screen — Start/Join Session or open standalone Character Sheet
@@ -368,6 +369,7 @@ This version of the tool **does not include** pre-loaded creatures, artefacts, o
 - ✅ Voice of the Fears — GM broadcast overlay for immersive fear messages
 
 **GM Tools**
+
 - ✅ Campaign dashboard with party overview and quick stats
 - ✅ Party manager: full character stats, damage state, stress, abilities, skills
 - ✅ NPC database with affiliations, relationships, and descriptions
@@ -379,6 +381,7 @@ This version of the tool **does not include** pre-loaded creatures, artefacts, o
 - ✅ Session notes with rich text editor and automatic session history
 
 **Content Libraries**
+
 - ✅ Bestiary: custom enemies with stats, abilities, and entity associations
 - ✅ Locations: detailed locations with NPCs, enemies, artefacts, and Leitner books
 - ✅ Artefacts: cursed objects with stress effects and fear properties
@@ -386,6 +389,7 @@ This version of the tool **does not include** pre-loaded creatures, artefacts, o
 - ✅ JSON import/export for all content types with blank template downloads
 
 **Save & Data**
+
 - ✅ Campaign save/load with full JSON export
 - ✅ Autosave every 10 minutes to localStorage
 - ✅ Works fully offline (no Firebase required for GM-only local use)
