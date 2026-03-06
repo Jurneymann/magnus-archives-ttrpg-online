@@ -2,7 +2,7 @@
 
 ## Online Multiplayer RPG Portal
 
-A comprehensive web-based toolset for running **online and local** tabletop RPG campaigns set in The Magnus Archives universe. The Firebase Institute brings your investigations into the digital realm with real-time multiplayer sessions, allowing Game Masters and players to connect from anywhere in the world—completely free!
+A comprehensive web-based toolset for running **online and local** tabletop RPG campaigns set in The Magnus Archives universe. The Magnus Archives Online brings your investigations into the digital realm with real-time multiplayer sessions, allowing Game Masters and players to connect from anywhere in the world—completely free!
 
 ### Core Features
 
@@ -17,7 +17,7 @@ A comprehensive web-based toolset for running **online and local** tabletop RPG 
 
 This project is free for use, but if you would like to contribute to my development costs, you can support me at [buymeacoffee/jurneymann](buymeacoffee.com/jurneymann)
 
-![Magnus Archives GM Tool](assets/MagnusHeader.png)
+![Magnus Archives GM Tool](public/assets/MagnusHeader.png)
 
 ## About The Magnus Archives
 
@@ -312,7 +312,7 @@ magnus-archives-ttrpg-online/
 
 ### Application
 
-This GM Tool application is provided as-is for personal use.
+This application is provided as-is for personal use.
 
 ### The Magnus Archives IP
 
@@ -415,7 +415,7 @@ Thanks to all Magnus Archives TTRPG fans and players who contribute to keeping t
 
 ### Tool Development
 
-This GM Tool was created by **[Jurneymann](https://github.com/Jurneymann)** to support Game Masters running campaigns in The Magnus Archives universe.
+This tool was created by **[Jurneymann](https://github.com/Jurneymann)** to support Game Masters running campaigns in The Magnus Archives universe.
 
 **Listen to the podcast**: https://rustyquill.com/the-magnus-archives/  
 **Purchase the rulebook**: https://www.montecookgames.com/store/product/the-magnus-archives-roleplaying-game/
