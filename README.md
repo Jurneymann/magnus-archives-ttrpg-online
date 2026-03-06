@@ -23,13 +23,13 @@ This project is free for use, but if you would like to contribute to my developm
 
 **[The Magnus Archives](https://rustyquill.com/the-magnus-archives/)** is a horror fiction podcast created by Jonathan Sims and produced by **[Rusty Quill](https://rustyquill.com)**. If you haven't listened to the podcast yet, we highly encourage you to experience this incredible story of supernatural horror and mystery!
 
-This GM Tool is designed to support the **[The Magnus Archives Roleplaying Game](https://www.montecookgames.com/store/product/the-magnus-archives-roleplaying-game/)**, published by **[Monte Cook Games](https://www.montecookgames.com)**. **Please note: You will need to purchase the official rulebook to play the game.** This tool provides campaign management utilities but does not contain the rules or copyrighted content from the sourcebooks.
+This online portal is designed to support the **[The Magnus Archives Roleplaying Game](https://www.montecookgames.com/store/product/the-magnus-archives-roleplaying-game/)**, published by **[Monte Cook Games](https://www.montecookgames.com)**. **Please note: You will need to purchase the official rulebook to play the game.** This tool provides campaign management and multiplayer session utilities but does not contain the rules or copyrighted content from the sourcebooks.
 
 **This is an unofficial fan-made tool and is not affiliated with, endorsed by, or sponsored by Rusty Quill or Monte Cook Games.**
 
 ## Features
 
-### 🌐 Online Multiplayer (NEW!)
+### 🌐 Online Multiplayer
 
 - **Room-Based Sessions**: Create 6-character room codes for players to join
 - **Real-Time Sync**: Character sheets, stress, and damage sync instantly
@@ -65,7 +65,7 @@ This GM Tool is designed to support the **[The Magnus Archives Roleplaying Game]
 ### ⚔️ Combat System
 
 - **Combat Tracker**: Full-featured initiative tracker with three phases (Setup, Initiative, Active)
-- **Battle Map**: Visual grid-based position tracking with terrain tools (NEW!)
+- **Battle Map**: Visual grid-based position tracking with terrain tools
   - Configurable map size (5-50 metres)
   - Combatant tokens with color coding (PCs, NPCs, Enemies)
   - Drag-and-drop movement for easy positioning
@@ -154,108 +154,110 @@ This application:
 
 - ✅ Stores all data locally in your browser
 - ✅ Works completely offline (after first load)
-- ✅ Includes Google Analytics for usage statistics only
+
 - ❌ Does not send campaign data to any server
 - ❌ Does not track personal information
 
 ## File Structure
 
 ```
-Magnus Archives GM Tool/
-├── welcome.html                # Entry point - GM/Player/Character selection
-├── index.html                  # Main GM application file
-├── player-view.html            # Player/Character sheet view
-├── gm-dashboard.html           # Standalone GM dashboard
-├── LICENSE                     # MIT License with disclaimers
-├── README.md                   # This file - main documentation
-├── assets/                     # Images and icons
-│   ├── favicon.png
-│   ├── MagnusHeader.png
-│   └── magnusbackground.jpg
-├── databases/                  # JSON templates and examples
+magnus-archives-ttrpg-online/
+├── public/                     # All hosted web files (Firebase Hosting root)
+│   ├── welcome.html            # Entry point — Start/Join Session or Character Sheet
+│   ├── index.html              # GM dashboard
+│   ├── gm-dashboard.html       # Standalone GM dashboard
+│   ├── player-view.html        # Player view and character sheet
+│   ├── assets/                 # Images and icons
+│   │   ├── favicon.png
+│   │   ├── MagnusHeader.png
+│   │   ├── magnusbackground.jpg
+│   │   └── Tarot/              # Entity tarot card images
+│   ├── dice-main/              # 3D dice roller library
+│   ├── functions/              # JavaScript modules
+│   │   ├── firebase-config.example.js  # Template — copy to firebase-config.js
+│   │   ├── firebase-config.js          # YOUR config (gitignored, create from example)
+│   │   ├── multiplayer.js              # Core Firebase session logic
+│   │   ├── gm-multiplayer.js           # GM-side multiplayer features
+│   │   ├── player-multiplayer.js       # Player-side multiplayer features
+│   │   ├── voice-of-fears.js           # Voice of the Fears overlay system
+│   │   ├── battle-map.js               # Battle map system
+│   │   ├── combat.js                   # Combat tracker
+│   │   ├── dashboard.js                # Dashboard and stats
+│   │   ├── party.js                    # Party member management
+│   │   ├── npcs.js                     # NPC management
+│   │   ├── bestiary.js                 # Enemy/creature management
+│   │   ├── locations.js                # Location management
+│   │   ├── artefacts.js                # Artefact management
+│   │   ├── leitners.js                 # Leitner book management
+│   │   ├── save-load.js                # Campaign save/load/autosave
+│   │   ├── tools.js                    # GM tools and generators
+│   │   ├── reference.js                # Reference library
+│   │   ├── tab-system.js               # Tab navigation
+│   │   ├── toolbar.js                  # Quick reference toolbar
+│   │   ├── time-tracker.js             # In-game time tracking
+│   │   ├── global.js                   # Global exports
+│   │   └── character-sheet/            # Character sheet JS modules
+│   │       ├── character.js
+│   │       ├── character-sync.js       # Multiplayer sync
+│   │       ├── abilities-management.js
+│   │       ├── skills.js
+│   │       ├── equipment.js
+│   │       ├── stress+damage.js
+│   │       ├── cypher-system.js
+│   │       ├── advancement.js
+│   │       ├── arcs.js
+│   │       ├── avatar.js
+│   │       ├── calculators.js
+│   │       ├── connections.js
+│   │       ├── recovery.js
+│   │       ├── save-load.js
+│   │       ├── ui-helpers.js
+│   │       └── global.js
+│   ├── styles/                 # CSS stylesheets
+│   │   ├── base.css
+│   │   ├── character-sheet.css
+│   │   ├── gm-tools.css
+│   │   ├── multiplayer.css
+│   │   ├── save-load.css
+│   │   ├── tabs.css
+│   │   ├── toolbar.css
+│   │   └── styles.css
+│   └── tables/                 # Static reference data
+│       ├── abilities.js
+│           ├── characterArcs.js
+│       ├── cyphers.js
+│       ├── difficulties.js
+│       ├── equipment-list.js
+│       ├── fociAbilities.js
+│       ├── skillsList.js
+│       └── startingBonuses.js
+├── databases/                  # Firebase setup files
+│   ├── firebase-rules.json     # Realtime Database security rules — apply in Firebase Console
 │   ├── artefacts-template.json
 │   ├── bestiary-template.json
 │   ├── leitners-template.json
 │   ├── locations-template.json
 │   └── battle-map-template.json
-├── docs/                       # Documentation
+├── docs/                       # Full documentation
 │   ├── CHANGELOG.md
-│   ├── ARTEFACTS_README.md
-│   ├── BATTLE_MAP_IMPLEMENTATION.md
-│   ├── BATTLE_MAP_QUICK_START.md
-│   ├── BATTLE_MAP_README.md
-│   ├── BESTIARY_README.md
-│   ├── CHAT_SYSTEM_README.md
-│   ├── DEPLOYMENT_CHECKLIST.md
-│   ├── DEPLOYMENT_GUIDE.md
-│   ├── IMPLEMENTATION_SUMMARY.md
-│   ├── LEITNERS_README.md
-│   ├── LOCATIONS_README.md
-│   ├── MULTIPLAYER_FEATURES.md
 │   ├── MULTIPLAYER_QUICKSTART.md
 │   ├── MULTIPLAYER_SETUP.md
-│   ├── MULTIPLAYER_SYSTEM_VERIFICATION.md
-│   └── NPCS_README.md
-├── functions/                  # Core JavaScript modules
-│   ├── artefacts.js            # Artefact management
-│   ├── battle-map.js           # Battle map system
-│   ├── bestiary.js             # Enemy/creature management
-│   ├── combat.js               # Combat tracker system
-│   ├── dashboard.js            # Dashboard and stats
-│   ├── firebase-config.js      # Firebase configuration (not committed)
-│   ├── gm-multiplayer.js       # GM multiplayer features
-│   ├── gm-player-details.js    # GM player detail panel
-│   ├── global.js               # Global function exports
-│   ├── leitners.js             # Leitner book management
-│   ├── locations.js            # Location management
-│   ├── main.js                 # Application initialization
-│   ├── multiplayer.js          # Core multiplayer logic
-│   ├── npcs.js                 # NPC management
-│   ├── party.js                # Party member management
-│   ├── player-multiplayer.js   # Player multiplayer features
-│   ├── reference.js            # Reference library
-│   ├── save-load.js            # Campaign save/load/autosave
-│   ├── tab-system.js           # Tab navigation
-│   ├── time-tracker.js         # In-game time tracking
-│   ├── toolbar.js              # Quick reference toolbar
-│   ├── tools.js                # GM tools and generators
-│   └── character-sheet/        # Character sheet JS modules
-│       ├── abilities-management.js
-│       ├── advancement.js
-│       ├── arcs.js
-│       ├── avatar.js
-│       ├── calculators.js
-│       ├── character.js
-│       ├── character-sync.js
-│       ├── connections.js
-│       ├── cypher-system.js
-│       ├── equipment.js
-│       ├── global.js
-│       ├── main.js
-│       ├── recovery.js
-│       ├── save-load.js
-│       ├── skills.js
-│       ├── stress+damage.js
-│       └── ui-helpers.js
-├── styles/                     # CSS styling
-│   ├── base.css                # Base layout and typography
-│   ├── character-sheet.css     # Character sheet styling
-│   ├── gm-tools.css            # GM tools styling
-│   ├── multiplayer.css         # Multiplayer UI styling
-│   ├── save-load.css           # Save/load panel styling
-│   ├── tabs.css                # Tab system styling
-│   └── toolbar.css             # Toolbar styling
-├── tables/                     # Reference data
-│   ├── abilities.js
-│   ├── avatarPowers.js
-│   ├── characterArcs.js
-│   ├── cyphers.js
-│   ├── difficulties.js
-│   ├── equipment-list.js
-│   ├── fociAbilities.js
-│   ├── skillsList.js
-│   └── startingBonuses.js
-└── reference/                  # Save location for character sheet JSON files
+│   ├── MULTIPLAYER_FEATURES.md
+│   ├── DEPLOYMENT_GUIDE.md
+│   ├── DEPLOYMENT_CHECKLIST.md
+│   ├── CHAT_SYSTEM_README.md
+│   ├── BATTLE_MAP_README.md
+│   ├── BATTLE_MAP_QUICK_START.md
+│   ├── BESTIARY_README.md
+│   ├── NPCS_README.md
+│   ├── ARTEFACTS_README.md
+│   ├── LEITNERS_README.md
+│   └── LOCATIONS_README.md
+├── .firebaserc                 # Firebase project alias — update with your project ID
+├── firebase.json               # Firebase Hosting config
+├── LICENSE
+├── README.md
+└── SETUP.md                    # Step-by-step setup guide for new instances
 ```
 
 ### Documentation Files (`docs/`)
@@ -355,46 +357,38 @@ This version of the tool **does not include** pre-loaded creatures, artefacts, o
 
 ## Changelog
 
-### Version 2.3 - UI Polish & Code Audit (March 2026)
+### Version 1.0 — Initial Public Release (March 2026)
 
-- ✨ **NEW**: Smart ability view auto-switching (Type & Focus tables)
-- ✨ **NEW**: Smart equipment/weapon view auto-switching
-- ✨ **NEW**: Manual view override flags (player choices no longer auto-overridden)
-- ✨ **NEW**: Battle map layer switching UI
-- 🐛 **FIX**: Details containers collapsing on battle map button clicks
-- 🐛 **FIX**: Equipment "Show All" state not persisting after add/remove
-- 🔧 **MAINTENANCE**: Duplicate function definitions removed from 4 files
-- 🔧 **MAINTENANCE**: All JS file copies synchronised across directories
-- 📂 **MAINTENANCE**: Documentation moved to `docs/` subdirectory
+**Multiplayer & Session Management**
+- ✅ Online multiplayer with Firebase Realtime Database (free tier)
+- ✅ Room-based sessions with 6-character shareable codes
+- ✅ Welcome screen — Start/Join Session or open standalone Character Sheet
+- ✅ Real-time character sheet synchronisation for all connected players
+- ✅ GM notification badge, typing indicators, and read receipts in chat
+- ✅ Voice of the Fears — GM broadcast overlay for immersive fear messages
 
-### Version 2.2 - Quick Reference Toolbar (February 2026)
+**GM Tools**
+- ✅ Campaign dashboard with party overview and quick stats
+- ✅ Party manager: full character stats, damage state, stress, abilities, skills
+- ✅ NPC database with affiliations, relationships, and descriptions
+- ✅ Combat tracker with Setup, Initiative, and Active phases
+- ✅ Battle map: configurable grid, terrain tools, drag-and-drop tokens, save/load presets
+- ✅ Quick Reference toolbar: Task Difficulty, Stress, Special Rolls, Damage Track
+- ✅ In-game time tracker
+- ✅ Plot thread tracker with clues, NPCs, entities, and connected content
+- ✅ Session notes with rich text editor and automatic session history
 
-- ✨ **NEW**: Consolidated 4-button toolbar
-- ✨ **NEW**: Tabbed Quick Reference modal (Task Difficulty, Stress, Special Rolls, Damage Track)
-- 💬 **IMPROVED**: Chat panel centering and notification badge
+**Content Libraries**
+- ✅ Bestiary: custom enemies with stats, abilities, and entity associations
+- ✅ Locations: detailed locations with NPCs, enemies, artefacts, and Leitner books
+- ✅ Artefacts: cursed objects with stress effects and fear properties
+- ✅ Leitner Books: dangerous tomes with entity connections and supernatural effects
+- ✅ JSON import/export for all content types with blank template downloads
 
-### Version 2.1 - Chat Enhancements (February 2026)
-
-- ✨ **NEW**: GM notification badge with pulse animation
-- ✨ **NEW**: Typing indicators (real-time, auto-clears after 3 seconds)
-- ✨ **NEW**: Read receipts (✓ Delivered / ✓✓ Read)
-- ✨ **NEW**: Automatic message history cleanup (100 message limit)
-
-### Version 2.0 - Multiplayer Update (January 2026)
-
-- ✨ **NEW**: Online multiplayer system with Firebase integration
-- ✨ **NEW**: Welcome screen for GM/Player/Character selection
-- ✨ **NEW**: Real-time character sheet synchronization
-- ✨ **NEW**: Battle Map system with terrain, fog of war, dynamic lighting
-- ✨ **NEW**: Horror Mode full theme system
-- ✨ **NEW**: In-game time tracker
-- ✨ **NEW**: Room-based sessions with shareable codes
-
-### Version 1.0 - Initial Release
-
-- ✅ Core GM tools: Dashboard, Party, NPCs, Combat, Bestiary, Locations, Artefacts, Leitner Books
-- ✅ JSON import/export for all content types
-- ✅ Autosave and manual campaign save/load
+**Save & Data**
+- ✅ Campaign save/load with full JSON export
+- ✅ Autosave every 10 minutes to localStorage
+- ✅ Works fully offline (no Firebase required for GM-only local use)
 
 ## Acknowledgments
 
@@ -430,7 +424,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Version**: 2.4  
+**Version**: 1.0  
 **Last Updated**: March 2026  
 **Repository**: https://github.com/Jurneymann/magnus-archives-ttrpg-online
 
