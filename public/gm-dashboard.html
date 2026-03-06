@@ -39,30 +39,12 @@
       };
     </script>
 
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-XBV69K4M8C"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      // Configure Google Analytics with appropriate settings
-      const isProduction =
-        window.location.hostname === "magnus-archives-online.web.app" ||
-        window.location.hostname === "magnus-archives-online.firebaseapp.com";
-
-      gtag("config", "G-XBV69K4M8C", {
-        transport_type: "beacon", // Use sendBeacon for better performance
-        cookie_flags: isProduction ? "SameSite=None;Secure" : "",
-        // Disable cookies on localhost to prevent warnings
-        client_storage: isProduction ? "enabled" : "none",
-      });
-    </script>
+    <!-- Google Analytics (optional)
+         To enable analytics for your deployment:
+         1. Create a Google Analytics 4 property at https://analytics.google.com/
+         2. Get your Measurement ID (format: G-XXXXXXXXXX)
+         3. Replace this comment with the gtag snippet shown in your GA4 property setup
+    -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Magnus Archives Online (GM)</title>
@@ -802,20 +784,258 @@
                   "
                   id="fearEntityGrid"
                 >
-                  <button class="fear-entity-btn" data-entity="buried"     onclick="selectFearEntity('buried')"     title="The Buried"     style="background:rgba(0,0,0,0.3);border:1px solid #a1887f55;color:#a1887faa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Buried</button>
-                  <button class="fear-entity-btn" data-entity="corruption" onclick="selectFearEntity('corruption')" title="The Corruption" style="background:rgba(0,0,0,0.3);border:1px solid #8bc34a55;color:#8bc34aaa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Corruption</button>
-                  <button class="fear-entity-btn" data-entity="dark"       onclick="selectFearEntity('dark')"       title="The Dark"       style="background:rgba(0,0,0,0.3);border:1px solid #607d8b55;color:#607d8baa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Dark</button>
-                  <button class="fear-entity-btn" data-entity="desolation" onclick="selectFearEntity('desolation')" title="The Desolation" style="background:rgba(0,0,0,0.3);border:1px solid #ff572255;color:#ff5722aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Desolation</button>
-                  <button class="fear-entity-btn" data-entity="end"        onclick="selectFearEntity('end')"        title="The End"        style="background:rgba(0,0,0,0.3);border:1px solid #9e9e9e55;color:#9e9e9eaa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">End</button>
-                  <button class="fear-entity-btn" data-entity="eye"        onclick="selectFearEntity('eye')"        title="The Eye"        style="background:rgba(0,0,0,0.3);border:1px solid #ff8f0055;color:#ff8f00aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Eye</button>
-                  <button class="fear-entity-btn" data-entity="flesh"      onclick="selectFearEntity('flesh')"      title="The Flesh"      style="background:rgba(0,0,0,0.3);border:1px solid #f0629255;color:#f06292aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Flesh</button>
-                  <button class="fear-entity-btn" data-entity="hunt"       onclick="selectFearEntity('hunt')"       title="The Hunt"       style="background:rgba(0,0,0,0.3);border:1px solid #4caf5055;color:#4caf50aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Hunt</button>
-                  <button class="fear-entity-btn" data-entity="lonely"     onclick="selectFearEntity('lonely')"     title="The Lonely"     style="background:rgba(0,0,0,0.3);border:1px solid #546e7a55;color:#546e7aaa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Lonely</button>
-                  <button class="fear-entity-btn" data-entity="slaughter"  onclick="selectFearEntity('slaughter')"  title="The Slaughter"  style="background:rgba(0,0,0,0.3);border:1px solid #f4433655;color:#f44336aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Slaughter</button>
-                  <button class="fear-entity-btn" data-entity="spiral"     onclick="selectFearEntity('spiral')"     title="The Spiral"     style="background:rgba(0,0,0,0.3);border:1px solid #e91e6355;color:#e91e63aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Spiral</button>
-                  <button class="fear-entity-btn" data-entity="stranger"   onclick="selectFearEntity('stranger')"   title="The Stranger"   style="background:rgba(0,0,0,0.3);border:1px solid #b0bec555;color:#b0bec5aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Stranger</button>
-                  <button class="fear-entity-btn" data-entity="vast"       onclick="selectFearEntity('vast')"       title="The Vast"       style="background:rgba(0,0,0,0.3);border:1px solid #5c6bc055;color:#5c6bc0aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Vast</button>
-                  <button class="fear-entity-btn" data-entity="web"        onclick="selectFearEntity('web')"        title="The Web"        style="background:rgba(0,0,0,0.3);border:1px solid #9c27b055;color:#9c27b0aa;border-radius:4px;padding:5px 4px;cursor:pointer;font-size:0.75em;white-space:nowrap;">Web</button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="buried"
+                    onclick="selectFearEntity('buried')"
+                    title="The Buried"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #a1887f55;
+                      color: #a1887faa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Buried
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="corruption"
+                    onclick="selectFearEntity('corruption')"
+                    title="The Corruption"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #8bc34a55;
+                      color: #8bc34aaa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Corruption
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="dark"
+                    onclick="selectFearEntity('dark')"
+                    title="The Dark"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #607d8b55;
+                      color: #607d8baa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Dark
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="desolation"
+                    onclick="selectFearEntity('desolation')"
+                    title="The Desolation"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #ff572255;
+                      color: #ff5722aa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Desolation
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="end"
+                    onclick="selectFearEntity('end')"
+                    title="The End"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #9e9e9e55;
+                      color: #9e9e9eaa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    End
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="eye"
+                    onclick="selectFearEntity('eye')"
+                    title="The Eye"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #ff8f0055;
+                      color: #ff8f00aa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Eye
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="flesh"
+                    onclick="selectFearEntity('flesh')"
+                    title="The Flesh"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #f0629255;
+                      color: #f06292aa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Flesh
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="hunt"
+                    onclick="selectFearEntity('hunt')"
+                    title="The Hunt"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #4caf5055;
+                      color: #4caf50aa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Hunt
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="lonely"
+                    onclick="selectFearEntity('lonely')"
+                    title="The Lonely"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #546e7a55;
+                      color: #546e7aaa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Lonely
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="slaughter"
+                    onclick="selectFearEntity('slaughter')"
+                    title="The Slaughter"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #f4433655;
+                      color: #f44336aa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Slaughter
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="spiral"
+                    onclick="selectFearEntity('spiral')"
+                    title="The Spiral"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #e91e6355;
+                      color: #e91e63aa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Spiral
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="stranger"
+                    onclick="selectFearEntity('stranger')"
+                    title="The Stranger"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #b0bec555;
+                      color: #b0bec5aa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Stranger
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="vast"
+                    onclick="selectFearEntity('vast')"
+                    title="The Vast"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #5c6bc055;
+                      color: #5c6bc0aa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Vast
+                  </button>
+                  <button
+                    class="fear-entity-btn"
+                    data-entity="web"
+                    onclick="selectFearEntity('web')"
+                    title="The Web"
+                    style="
+                      background: rgba(0, 0, 0, 0.3);
+                      border: 1px solid #9c27b055;
+                      color: #9c27b0aa;
+                      border-radius: 4px;
+                      padding: 5px 4px;
+                      cursor: pointer;
+                      font-size: 0.75em;
+                      white-space: nowrap;
+                    "
+                  >
+                    Web
+                  </button>
                 </div>
 
                 <!-- Message textarea -->

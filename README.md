@@ -432,6 +432,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Version**: 2.4  
 **Last Updated**: March 2026  
-**Repository**: https://github.com/Jurneymann/magnus-archives-online-private (private)
+**Repository**: https://github.com/Jurneymann/magnus-archives-ttrpg-online
 
 For questions, suggestions, or contributions, please use the repository's issue tracker or discussions section.

@@ -47,8 +47,8 @@ firebase --version
 ### Clone the repository
 
 ```powershell
-git clone https://github.com/Jurneymann/magnus-archives-online-private.git
-cd "magnus-archives-online-private"
+git clone https://github.com/Jurneymann/magnus-archives-ttrpg-online.git
+cd "magnus-archives-ttrpg-online"
 ```
 
 ### Add your Firebase config
