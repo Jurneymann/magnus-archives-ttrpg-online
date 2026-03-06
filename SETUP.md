@@ -11,11 +11,11 @@ This guide walks a new host through cloning this repository and deploying their 
 
 Install these before you begin:
 
-| Tool | Version | Link |
-|---|---|---|
-| Node.js | 18 or later | https://nodejs.org |
-| Firebase CLI | latest | `npm install -g firebase-tools` |
-| A Google account | — | https://accounts.google.com |
+| Tool             | Version     | Link                            |
+| ---------------- | ----------- | ------------------------------- |
+| Node.js          | 18 or later | https://nodejs.org              |
+| Firebase CLI     | latest      | `npm install -g firebase-tools` |
+| A Google account | —           | https://accounts.google.com     |
 
 Verify the CLI is installed:
 
@@ -58,24 +58,15 @@ cd "magnus-archives-online-private"
 3. Register the app (any nickname) — you **don't** need Firebase Hosting selected here
 4. Copy the `firebaseConfig` object shown
 
-Open `public/functions/firebase-config.js` and replace the placeholder values:
+Copy the provided example file and fill in your credentials:
 
-```javascript
-// public/functions/firebase-config.js
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-
-firebase.initializeApp(firebaseConfig);
+```bash
+cp public/functions/firebase-config.example.js public/functions/firebase-config.js
 ```
 
-> ⚠️ **Do not commit `firebase-config.js` to a public repository.** The `.gitignore` already excludes it.
+Then open `public/functions/firebase-config.js` and replace every `YOUR_*` placeholder with the values from your Firebase project settings.
+
+> ⚠️ **Do not commit `firebase-config.js` to a public repository.** The `.gitignore` already excludes it — `firebase-config.example.js` is the safe template to commit instead.
 
 ---
 
@@ -107,6 +98,7 @@ Firebase Realtime Database starts in **test mode** (publicly readable). Before s
 3. Paste it into the rules editor and click **Publish**
 
 The rules restrict:
+
 - Room data to participants who know the room code
 - Write access to authenticated/known sessions
 
@@ -157,7 +149,8 @@ firebase deploy --only hosting
 │   ├── assets/              ← Images and icons
 │   ├── dice-main/           ← 3D dice roller library
 │   ├── functions/           ← All JavaScript modules
-│   │   ├── firebase-config.js   ← YOUR config goes here
+│   │   ├── firebase-config.example.js ← Template — copy to firebase-config.js
+│   │   ├── firebase-config.js   ← YOUR config (gitignored, not in repo)
 │   │   ├── multiplayer.js       ← Core Firebase sync logic
 │   │   ├── gm-multiplayer.js    ← GM-side multiplayer features
 │   │   ├── player-multiplayer.js← Player-side multiplayer features
@@ -231,11 +224,11 @@ Clear your browser cache or open in a private/incognito window. Firebase Hosting
 
 ## Related Documentation
 
-| Doc | Purpose |
-|---|---|
-| [docs/MULTIPLAYER_SETUP.md](docs/MULTIPLAYER_SETUP.md) | Full multiplayer configuration guide |
-| [docs/MULTIPLAYER_QUICKSTART.md](docs/MULTIPLAYER_QUICKSTART.md) | 5-minute quickstart |
-| [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) | Detailed step-by-step deployment walkthrough |
-| [docs/CHAT_SYSTEM_README.md](docs/CHAT_SYSTEM_README.md) | Chat system and Voice of the Fears |
-| [docs/BATTLE_MAP_README.md](docs/BATTLE_MAP_README.md) | Battle map system |
-| [databases/firebase-rules.json](databases/firebase-rules.json) | Firebase security rules |
+| Doc                                                              | Purpose                                      |
+| ---------------------------------------------------------------- | -------------------------------------------- |
+| [docs/MULTIPLAYER_SETUP.md](docs/MULTIPLAYER_SETUP.md)           | Full multiplayer configuration guide         |
+| [docs/MULTIPLAYER_QUICKSTART.md](docs/MULTIPLAYER_QUICKSTART.md) | 5-minute quickstart                          |
+| [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)             | Detailed step-by-step deployment walkthrough |
+| [docs/CHAT_SYSTEM_README.md](docs/CHAT_SYSTEM_README.md)         | Chat system and Voice of the Fears           |
+| [docs/BATTLE_MAP_README.md](docs/BATTLE_MAP_README.md)           | Battle map system                            |
+| [databases/firebase-rules.json](databases/firebase-rules.json)   | Firebase security rules                      |
