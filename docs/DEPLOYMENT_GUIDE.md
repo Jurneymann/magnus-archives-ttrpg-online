@@ -1,8 +1,8 @@
 # Firebase Deployment Guide
 
-## Magnus Archives - Firebase Institute
+## Magnus Archives Online
 
-This guide will walk you through deploying your Magnus Archives GM Tool to Firebase Hosting with Realtime Database.
+This guide will walk you through deploying Magnus Archives Online to Firebase Hosting with Realtime Database.
 
 ---
 
@@ -122,7 +122,7 @@ const firebaseConfig = {
 Open PowerShell in your project folder:
 
 ```powershell
-cd "c:\Users\joene\Documents\VSCode\Magnus\Magnus Archives - Firebase Institute"
+cd "magnus-archives-ttrpg-online"
 ```
 
 1. [ ] Check if Node.js is installed:
@@ -184,7 +184,7 @@ firebase login
 1. [ ] Make sure you're in the project directory:
 
 ```powershell
-cd "c:\Users\joene\Documents\VSCode\Magnus\Magnus Archives - Firebase Institute"
+cd "magnus-archives-ttrpg-online"
 ```
 
 2. [ ] Run initialization:
@@ -279,7 +279,6 @@ firebase deploy
 ```
 
 3. [ ] Watch the deployment progress:
-
    - You'll see files being uploaded
    - Takes 30-90 seconds depending on internet speed
 
@@ -711,7 +710,6 @@ Consider adding:
 ### Free Tier Limits (Spark Plan)
 
 - **Realtime Database:**
-
   - 1 GB storage
   - 10 GB/month download
   - 100 simultaneous connections

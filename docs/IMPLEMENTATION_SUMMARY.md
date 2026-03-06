@@ -1,8 +1,8 @@
-# 🎉 Welcome to the Firebase Institute!
+# 🎉 Magnus Archives Online — Multiplayer System Overview
 
-## Magnus Archives Online Multiplayer Portal
+## Online Multiplayer Portal
 
-The **Firebase Institute** is your complete online multiplayer solution for The Magnus Archives RPG! This evolved version of the GM Tool now allows GMs and players to connect from anywhere in the world—completely free!
+**Magnus Archives Online** is a complete online multiplayer solution for The Magnus Archives RPG, allowing GMs and players to connect from anywhere in the world—completely free!
 
 ### New Files Created
 
