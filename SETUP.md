@@ -222,6 +222,49 @@ Clear your browser cache or open in a private/incognito window. Firebase Hosting
 
 ---
 
+## Taking Down Your Instance
+
+If you no longer want to run your instance, follow these steps to cleanly remove everything.
+
+### Step 1 — Remove hosted files (stop serving the site)
+
+```powershell
+firebase hosting:disable
+```
+
+This immediately takes the site offline. Your project and database are still intact — only the public URL stops working.
+
+### Step 2 — Delete the Realtime Database (optional)
+
+1. Go to **https://console.firebase.google.com** → your project
+2. Sidebar: **Build → Realtime Database**
+3. Click the **⋮ menu** (top right of the data panel) → **Delete database**
+4. Confirm deletion
+
+> ⚠️ This permanently deletes all room data, campaign syncs, and chat history. Export anything you want to keep first using the GM Dashboard's **Save Campaign** feature.
+
+### Step 3 — Delete the Firebase project entirely (optional)
+
+1. In the Firebase Console: click the **⚙️ gear icon** → **Project settings**
+2. Scroll to the bottom → **Delete project**
+3. Type the project ID to confirm
+
+This removes the project, all associated services, and the Firebase Hosting URL permanently.
+
+### Step 4 — Remove the Firebase CLI link locally (optional)
+
+```powershell
+firebase logout
+```
+
+If you also want to remove the CLI tool itself:
+
+```powershell
+npm uninstall -g firebase-tools
+```
+
+---
+
 ## Related Documentation
 
 | Doc                                                              | Purpose                                      |
